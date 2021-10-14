@@ -9,15 +9,18 @@ Welcome!!
 .. toctree::
    :caption: 仕様書
    :maxdepth: 1
+   :glob:
 
    abstruct.md
+   specs/*
     
 .. toctree::
    :caption: 進捗状況
    :maxdepth: 1
+   :glob:
 
    gantt.md
-   daily.md
+   dialy/*
 
 .. toctree::
    :caption: 議論スペース
