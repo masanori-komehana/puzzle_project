@@ -29,6 +29,8 @@ author = 'st202109'
 # ones.
 extensions = [
         'recommonmark',
+        'sphinxcontrib.toc',
+        'sphinxcontrib.mermaid',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -74,7 +76,8 @@ from recommonmark.transform import AutoStructify
 def setup(app):
     app.add_config_value('recommonmark_config', {
             #'url_resolver': lambda url: github_doc_root + url,
-            'auto_toc_tree_section': '目次',
+            #'auto_toc_tree_section': '目次',
+            'enable_auto_toc_tree': False,
             }, True)
     app.add_transform(AutoStructify)
 

@@ -1,0 +1,12 @@
+# 仕様書
+abstruct
+
+# 進捗状況
+daily
+gantt
+
+# 議論スペース
+sandbox
+
+# 質問票
+ask20211012
