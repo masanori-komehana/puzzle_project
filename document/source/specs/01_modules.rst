@@ -5,6 +5,16 @@
 
 以下は本装置のモジュール構成図である。
 
+
+.. raw:: html
+
+    <script>
+        mermaid.initialize({
+            theme: 'neutral',
+        });
+    </script>
+
+
 .. mermaid::
 
     graph TD;
