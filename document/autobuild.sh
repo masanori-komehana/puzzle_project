@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .env/bin/activate
+
 echo build process start.
 echo ----------------------------------------
 

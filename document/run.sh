@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .env/bin/activate
+
 make clean
 make html
 
