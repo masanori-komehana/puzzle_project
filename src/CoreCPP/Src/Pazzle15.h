@@ -67,6 +67,13 @@ public:
 
 	void pazzle_move(int);
 
+
+	void set_flg();
+	int get_flg();
+
+	int get_state();
+	void state_change(int);
+
 	POS get_blank_pos(void);
 	void move_blank(POS);
 	void pazzle_esc(void);
@@ -74,9 +81,6 @@ public:
 	void board_init(void);
 	void board_shuffle(int, int);
 	bool is_game_clear(void);
-
-	int get_state();
-	void state_change(int);
 };
 
 #endif /* SRC_PAZZLE15_H_ */

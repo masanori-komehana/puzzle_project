@@ -8,13 +8,10 @@
 #include "Timer10ms.h"
 
 Timer10ms::Timer10ms() {
-	// TODO Auto-generated constructor stub
-	min = 0;
-	sec = 0;
-	ms10 = 0;
+	clr();
 }
+
 Timer10ms::Timer10ms(int m, int s, int ms) {
-	// TODO Auto-generated constructor stub
 	min = m;
 	sec = s;
 	ms10 = ms;
