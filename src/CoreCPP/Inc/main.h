@@ -45,29 +45,8 @@ typedef uint32_t * uintp;
 typedef GPIO_TypeDef * GPIO_x;
 
 
-
-//
-typedef struct TAG_SW_IF{
-	GPIO_x reg;
-	int32_t port_num;
-	uint32_t swc;
-	uint32_t swp1;
-	uint32_t swp2;
-	uint32_t now;
-	uint32_t last;
-	uint32_t up;
-} SW_IF;
-
-
-
-// 押しボタンスイッチ
-enum TButtons{
-	BTN_LEFT,
-	BTN_DOWN,
-	BTN_UP,
-	BTN_RIGHT,
-	BTN_ESC,
-};
+#define SW_NUM 7
+#define TICKS_1S 3200
 
 enum TGeneralFlgs {
 	// 画面データ要求

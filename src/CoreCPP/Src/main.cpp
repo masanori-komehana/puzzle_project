@@ -25,6 +25,9 @@
 #include "Pazzle15mid.h"
 #include "Timer10ms.h"
 
+#include "LEDMAT.h"
+#include "BUTTON.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -84,42 +87,56 @@ void SysTick_Handler(void)
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
+	/* USER CODE BEGIN 1 */
 
-  /* USER CODE END 1 */
+	Pazzle15_mid pz15_mid;
+	Pazzle15 pz15(pz15_mid);
 
-  /* MCU Configuration--------------------------------------------------------*/
+	std::vector<BUTTON> sw_all;
+	sw_all.reserve(SW_NUM);
+	/* USER CODE END 1 */
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	/* MCU Configuration--------------------------------------------------------*/
 
-  /* USER CODE BEGIN Init */
+	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	HAL_Init();
 
-  /* USER CODE END Init */
+	/* USER CODE BEGIN Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	/* USER CODE END Init */
 
-  /* USER CODE BEGIN SysInit */
+	/* Configure the system clock */
+	SystemClock_Config();
 
-  /* USER CODE END SysInit */
+	/* USER CODE BEGIN SysInit */
+	uint32_t sysClk;
+	SystemCoreClockUpdate();
+	sysClk = SystemCoreClock;
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_USART2_UART_Init();
-  /* USER CODE BEGIN 2 */
+	SysTick_Config(sysClk / TICKS_1S);
 
-  /* USER CODE END 2 */
+	/* USER CODE END SysInit */
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
+	/* Initialize all configured peripherals */
+	MX_GPIO_Init();
+	MX_USART2_UART_Init();
+	/* USER CODE BEGIN 2 */
+	GPIOA->ODR = 0x0;
+	GPIOB->ODR = 0x0;
+	for (int i = 0; i < SW_NUM; ++i) {
+		sw_all.push_back(BUTTON(GPIOC, i));
+	}
+	/* USER CODE END 2 */
 
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
+	while (1)
+	{
+		/* USER CODE END WHILE */
+
+		/* USER CODE BEGIN 3 */
+	}
+/* USER CODE END 3 */
 }
 
 /**

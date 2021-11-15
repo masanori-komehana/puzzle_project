@@ -10,9 +10,9 @@
 RGB_DATALINE::RGB_DATALINE(int size) {
 	// TODO Auto-generated constructor stub
 	length = size;
-	data_line = new RGB[size];
+	data_line.reserve(size);
 	for (int i = 0; i < length; ++i) {
-		data_line[i] = new RGB(0);
+		data_line.push_back(RGB(0));
 	}
 }
 
@@ -23,3 +23,7 @@ RGB_DATALINE::~RGB_DATALINE() {
 	}
 }
 
+
+RGB RGB_DATALINE::operator[](int i){
+	return data_line[i];
+}

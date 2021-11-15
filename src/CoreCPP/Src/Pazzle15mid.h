@@ -8,7 +8,11 @@
 #ifndef SRC_PAZZLE15MID_H_
 #define SRC_PAZZLE15MID_H_
 
+#include "DOTMAT.h"
+
 class Pazzle15_mid {
+private:
+	DOTMAT disp_mat;
 public:
 	Pazzle15_mid();
 	virtual ~Pazzle15_mid();
@@ -24,6 +28,8 @@ public:
 
 	void disp_update();
 	void set_disp_data();
+
+	DOTMAT get_piece_data(int);
 
 	int get_disp_data(int, int);
 };

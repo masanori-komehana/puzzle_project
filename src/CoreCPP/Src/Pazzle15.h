@@ -81,6 +81,7 @@ public:
 	void board_init(void);
 	void board_shuffle(int, int);
 	bool is_game_clear(void);
+
 };
 
 #endif /* SRC_PAZZLE15_H_ */

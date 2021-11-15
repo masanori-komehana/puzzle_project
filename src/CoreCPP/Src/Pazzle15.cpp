@@ -99,9 +99,6 @@ void Pazzle15::move_blank(POS mov_pos)
     board[mov_pos.row][mov_pos.col] = tempBlank;
 }
 
-
-
-
 void Pazzle15::board_init(void){
 	for (int i = 0; i < BOARD_SIZE; ++i) {
 		for (int j = 0; j < BOARD_SIZE; ++j) {
