@@ -91,6 +91,7 @@ int main(void)
 
 	Pazzle15_mid pz15_mid;
 	Pazzle15 pz15(pz15_mid);
+	LEDMAT led_mat(32);
 
 	std::vector<BUTTON> sw_all;
 	sw_all.reserve(SW_NUM);
