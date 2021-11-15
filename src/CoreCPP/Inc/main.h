@@ -40,26 +40,6 @@ extern "C" {
 /* USER CODE BEGIN ET */
 
 
-typedef uint32_t * uintp;
-
-typedef GPIO_TypeDef * GPIO_x;
-
-
-#define SW_NUM 7
-#define TICKS_1S 3200
-
-enum TGeneralFlgs {
-	// 画面データ要求
-	CLS,
-	// 区間ごとに立てるフラグ
-	EN_1s,
-	EN_10ms,
-	// 何かのスイッチ押された
-	SW_POSEDGE,
-	// USBになんか来た
-	RECV_USART,
-};
-
 
 /* USER CODE END ET */
 
@@ -70,11 +50,6 @@ enum TGeneralFlgs {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
-#define FLG(flg_val) (((uint32_t)0x00000001)<<(flg_val))
-#define HAS_FLG(flg_dat, flg_val) flg_dat & FLG(flg_val)
-#define CLR_FLG(flg_dat, flg_val) flg_dat &= ~FLG(flg_val)
-#define SET_FLG(flg_dat, flg_val) flg_dat |= FLG(flg_val)
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
