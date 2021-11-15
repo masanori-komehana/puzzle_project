@@ -226,7 +226,7 @@ void SysTick_Handler(void){
 		}
 	}
 
-	;
+	
 
 	if(delay_time==0)
 	  delay_time=0;
@@ -391,7 +391,7 @@ int main(void)
 					case BTN_ESC:	pazzle_esc(); break;
 					case BTN_LEFT:	direction = MOVE_LEFT;	break;
 					case BTN_DOWN:	direction = MOVE_DOWN;	break;
-					case BTN_UP:	direction = MOVE_UP;		break;
+					case BTN_UP:	direction = MOVE_UP;	break;
 					case BTN_RIGHT:	direction = MOVE_RIGHT;	break;
 					default: break;
 					}
