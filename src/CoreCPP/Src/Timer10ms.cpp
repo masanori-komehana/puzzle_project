@@ -24,6 +24,12 @@ void Timer10ms::clr() {
 }
 
 
+void Timer10ms::add_time(int m, int s, int ms) {
+	min += m;
+	sec += s;
+	ms10 += ms;
+}
+
 Timer10ms::~Timer10ms() {
 	// TODO Auto-generated destructor stub
 }

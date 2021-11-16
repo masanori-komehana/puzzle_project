@@ -25,7 +25,9 @@ public:
 	void reserve_push();
 	RGB_DATALINE operator[](int);
 
-	void cpMat(int, int, int, int, DOTMAT);
+	void clr();
+
+	void cpMat(int, int, int, int, DOTMAT &);
 	void cpMat(int, int, int, int, int, int[]);
 };
 

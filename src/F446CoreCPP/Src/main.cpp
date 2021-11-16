@@ -18,31 +18,16 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <main.h>
+#include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
-#include "pazzle_project.h"
-
-#include "Pazzle15.h"
-#include "Pazzle15mid.h"
-#include "Timer10ms.h"
-
-#include "LEDMAT.h"
-#include "BUTTON.h"
-#include "FLGManager.h"
-#include "MYUSART.h"
-
-#define ENABLE_LEDMAT_DISP_TEST 1
-#if ENABLE_LEDMAT_DISP_TEST
-#include "LEDMATDISPTEST.h"
-#endif
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -55,20 +40,19 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+TIM_HandleTypeDef htim3;
+
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-LEDMAT led_mat(32);
-Pazzle15_mid pz15_mid;
-Pazzle15 pz15(pz15_mid);
-FLGManager fmng;
-MY_USART my_usart;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
+static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -78,43 +62,19 @@ static void MX_USART2_UART_Init(void);
 
 /* USER CODE END 0 */
 
+
 /**
   * @brief This function handles System tick timer.
   */
 void SysTick_Handler(void)
 {
-    /* USER CODE BEGIN SysTick_IRQn 0 */
-    static int time_1s = 1;
-    static int pwm = 0;
-    static int line = 0;
-    /* USER CODE END SysTick_IRQn 0 */
-    HAL_IncTick();
-    /* USER CODE BEGIN SysTick_IRQn 1 */
-    if (time_1s == TICKS_1S){
-    	fmng.set_flg(EN_1s);
-    time_1s = 1;
-    //		if(USART2->SR & USART_SR_TXE_Msk)
-    //			USART2->DR = 'U';
-    //		piece_select = (piece_select+1) % 16 ;
-    } else {
-        time_1s++;
-    }
+  /* USER CODE BEGIN SysTick_IRQn 0 */
 
-    if(my_usart.is_data_recv()){
-    	fmng.set_flg(RECV_USART);
-    }
+  /* USER CODE END SysTick_IRQn 0 */
+//  HAL_IncTick();
+  /* USER CODE BEGIN SysTick_IRQn 1 */
 
-    led_mat.send_line(pwm, line, 23);
-
-	if (line>=15){
-		line = 0;
-		pwm = (pwm+1)%3;
-	}else{
-		line++;
-	}
-
-
-    /* USER CODE END SysTick_IRQn 1 */
+  /* USER CODE END SysTick_IRQn 1 */
 }
 
 /**
@@ -123,61 +83,43 @@ void SysTick_Handler(void)
   */
 int main(void)
 {
-	/* USER CODE BEGIN 1 */
+  /* USER CODE BEGIN 1 */
 
+  /* USER CODE END 1 */
 
+  /* MCU Configuration--------------------------------------------------------*/
 
-	std::vector<BUTTON> sw_all;
-	sw_all.reserve(SW_NUM);
-	/* USER CODE END 1 */
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
 
-	/* MCU Configuration--------------------------------------------------------*/
+  /* USER CODE BEGIN Init */
 
-	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
+  /* USER CODE END Init */
 
-	/* USER CODE BEGIN Init */
+  /* Configure the system clock */
+  SystemClock_Config();
 
-	/* USER CODE END Init */
+  /* USER CODE BEGIN SysInit */
 
-	/* Configure the system clock */
-	SystemClock_Config();
+  /* USER CODE END SysInit */
 
-	/* USER CODE BEGIN SysInit */
-	uint32_t sysClk;
-	SystemCoreClockUpdate();
-	sysClk = SystemCoreClock;
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_USART2_UART_Init();
+  MX_TIM3_Init();
+  /* USER CODE BEGIN 2 */
 
-	SysTick_Config(sysClk / TICKS_1S);
+  /* USER CODE END 2 */
 
-	/* USER CODE END SysInit */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
 
-	/* Initialize all configured peripherals */
-	MX_GPIO_Init();
-	MX_USART2_UART_Init();
-	/* USER CODE BEGIN 2 */
-	GPIOA->ODR = 0x0;
-	GPIOB->ODR = 0x0;
-	for (int i = 0; i < SW_NUM; ++i) {
-		sw_all.push_back(BUTTON(GPIOC, i));
-	}
-	#ifdef ENABLE_LEDMAT_DISP_TEST
-		LEDMAT_DISP_TEST mat_test;
-		led_mat = mat_test.mat;
-	#endif
-	/* USER CODE END 2 */
-	/* Infinite loop */
-	/* USER CODE BEGIN WHILE */
-	while (1)
-	{
-		/* USER CODE END WHILE */
-#ifdef ENABLE_LEDMAT_DISP_TEST
-	mat_test.cp();
-#endif
-
-		/* USER CODE BEGIN 3 */
-	}
-/* USER CODE END 3 */
+    /* USER CODE BEGIN 3 */
+  }
+  /* USER CODE END 3 */
 }
 
 /**
@@ -223,6 +165,65 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 0;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 65535;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+  HAL_TIM_MspPostInit(&htim3);
+
 }
 
 /**

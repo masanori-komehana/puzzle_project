@@ -49,8 +49,16 @@ RGB_DATALINE DOTMAT::operator[](int i){
 	return dot_data[i];
 }
 
+void DOTMAT::clr(){
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			dot_data[i][j] = 0;
+		}
+	}
+}
+
 void DOTMAT::cpMat(int row, int col, int wid, int hei,
-		DOTMAT src_data){
+		DOTMAT& src_data){
 	for (int i = 0; i < hei; ++i) {
 		for (int j = 0; j < wid; ++j) {
 			dot_data[row+i][col+j] = src_data[i][j];

@@ -32,10 +32,17 @@ extern "C"{
 #define OE_HI 0x80
 
 
-class LEDMAT : DOTMAT {
+class LEDMAT : public DOTMAT {
+protected:
 	int clk;
 	int rgb_data;
 public:
+	// 継承元のコンストラクタ書かないと呼んでくれない
+	LEDMAT(int w,int h,int color,int lines[])
+	:DOTMAT(w, h, color, lines){}
+	LEDMAT(int w,int h):DOTMAT(w, h){}
+	LEDMAT(int size):DOTMAT(size) {}
+	LEDMAT();
 	RGB DOT(int,int);
 	void send_line(int, int, int);
 };

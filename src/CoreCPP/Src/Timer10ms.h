@@ -9,7 +9,7 @@
 #define SRC_TIMER10MS_H_
 
 
-// ŠÔŠÇ——p
+// æ™‚é–“ç®¡ç†ç”¨
 class Timer10ms {
 public:
 	Timer10ms();
@@ -39,6 +39,7 @@ public:
 			ms10++;
 		}
 	}
+	void add_time(int m, int s, int ms);
 };
 
 #endif /* SRC_TIMER10MS_H_ */

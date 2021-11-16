@@ -19,20 +19,20 @@ void LEDMAT::send_line(int pwm, int line_index, int oetime=23){
 	int line_bits = 0;
 
 	for(int fclk_cnt=0;fclk_cnt<64;fclk_cnt++){
-		// ƒNƒƒbƒN—§‰º‚èŽž‚Ì“®ì
+		// ã‚¯ãƒ­ãƒƒã‚¯ç«‹ä¸‹ã‚Šæ™‚ã®å‹•ä½œ
 		if ((clk==0)){
-			// ƒNƒƒbƒNƒtƒ‰ƒO”½“]
+			// ã‚¯ãƒ­ãƒƒã‚¯ãƒ•ãƒ©ã‚°åè»¢
 			clk=1;
-			// ƒNƒƒbƒN”ƒJƒEƒ“ƒg
+			// ã‚¯ãƒ­ãƒƒã‚¯æ•°ã‚«ã‚¦ãƒ³ãƒˆ
 			if(clk_cnt>=31){
 				clk_cnt=0;
 			}
 			else
 				clk_cnt++;
-			//ƒNƒƒbƒNo—Í LoW
+			//ã‚¯ãƒ­ãƒƒã‚¯å‡ºåŠ› LoW
 			GPIOB->ODR &= ~CLK_HI;       //SCK=0
 
-			//ƒf[ƒ^“‡
+			//ãƒ‡ãƒ¼ã‚¿çµ±åˆ
 			rgb_data = 0;
 			rgb_data |= ((line0[clk_cnt].R() > pwm)?1:0) << 6;
 			rgb_data |= ((line1[clk_cnt].R() > pwm)?1:0) << 7;
@@ -40,10 +40,10 @@ void LEDMAT::send_line(int pwm, int line_index, int oetime=23){
 			rgb_data |= ((line1[clk_cnt].G() > pwm)?1:0) << 9;
 			rgb_data |= ((line0[clk_cnt].B() > pwm)?1:0) << 10;
 			rgb_data |= ((line1[clk_cnt].B() > pwm)?1:0) << 11;
-			//ƒf[ƒ^o—Í
+			//ãƒ‡ãƒ¼ã‚¿å‡ºåŠ›
 			GPIOA->ODR &= ~RGB_MASK | rgb_data ;
 			GPIOA->ODR |= RGB_MASK & rgb_data ;
-			//ƒ‰ƒbƒ`
+			//ãƒ©ãƒƒãƒ
 			if(clk_cnt==31){
 				GPIOB->ODR |=  STB_HI;      //SLATB =1
 				line_bits = ((line_index & 0xc)<<2) |(line_index & 0x3);
@@ -53,7 +53,7 @@ void LEDMAT::send_line(int pwm, int line_index, int oetime=23){
 			if(clk_cnt==0){
 				GPIOB->ODR &= ~ STB_HI;     //SLATB =0
 			}
-			//o—ÍƒCƒl[ƒuƒ‹
+			//å‡ºåŠ›ã‚¤ãƒãƒ¼ãƒ–ãƒ«
 			if(clk_cnt==oetime){
 				GPIOB->ODR |= OE_HI;      //OEB=1
 			}
@@ -61,11 +61,11 @@ void LEDMAT::send_line(int pwm, int line_index, int oetime=23){
 				GPIOB->ODR &= ~OE_HI;     //OEB=0
 			}
 		}
-		// ƒNƒƒbƒN—§‚¿ã‚ª‚èŽž‚Ì“®ì
+		// ã‚¯ãƒ­ãƒƒã‚¯ç«‹ã¡ä¸ŠãŒã‚Šæ™‚ã®å‹•ä½œ
 		else{
-			// ƒNƒƒbƒNƒtƒ‰ƒO”½“]
+			// ã‚¯ãƒ­ãƒƒã‚¯ãƒ•ãƒ©ã‚°åè»¢
 			clk=0;
-			//ƒNƒƒbƒNo—Í Hi
+			//ã‚¯ãƒ­ãƒƒã‚¯å‡ºåŠ› Hi
 			GPIOB->ODR |= CLK_HI;        //SCK=1
 		}
 	}

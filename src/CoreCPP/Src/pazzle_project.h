@@ -11,13 +11,9 @@
 /* Exported types ------------------------------------------------------------*/
 
 
-typedef uint32_t * uintp;
-
-typedef GPIO_TypeDef * GPIO_x;
-
-
 #define SW_NUM 7
 #define TICKS_1S 3200
+
 
 enum TGeneralFlgs {
     // 画面データ要求
@@ -32,6 +28,7 @@ enum TGeneralFlgs {
 };
 
 
+
 /* Exported constants --------------------------------------------------------*/
 
 
@@ -39,7 +36,7 @@ enum TGeneralFlgs {
 /* Exported macro ------------------------------------------------------------*/
 
 
-#define FLG(flg_val) (((uint32_t)0x00000001)<<(flg_val))
+#define FLG(flg_val) (((unsigned int)0x00000001)<<(flg_val))
 #define HAS_FLG(flg_dat, flg_val) flg_dat & FLG(flg_val)
 #define CLR_FLG(flg_dat, flg_val) flg_dat &= ~FLG(flg_val)
 #define SET_FLG(flg_dat, flg_val) flg_dat |= FLG(flg_val)

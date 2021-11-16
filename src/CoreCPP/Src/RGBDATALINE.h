@@ -20,9 +20,9 @@ enum tColorVal{
 	tcolor_WHITE  = 0x0fff,
 };
 
-// C#‚ÌƒvƒƒpƒeƒB“I‚È
+// C#ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£çš„ãª
 struct RGB_prop{
-	// QÆƒƒ“ƒo[‚í‚©‚ç‚ñ‚Ì‚Åƒ|ƒCƒ“ƒ^‚É‚µ‚½
+	// å‚ç…§ãƒ¡ãƒ³ãƒãƒ¼ã‚ã‹ã‚‰ã‚“ã®ã§ãƒã‚¤ãƒ³ã‚¿ã«ã—ãŸ
 	int* data;
 	int color;
 
@@ -32,13 +32,13 @@ struct RGB_prop{
 		*data |= (v & 0x00f) << color;
 	}
 
-	// Ql:@https://marycore.jp/prog/cpp/simple-property/
-	// ‚É‚ ‚Á‚½g‚¢•ûH
+	// å‚è€ƒ:ã€€https://marycore.jp/prog/cpp/simple-property/
+	// ã«ã‚ã£ãŸä½¿ã„æ–¹ï¼Ÿ
 	operator int(){
 		return get();
 	}
 
-	// ƒLƒƒƒXƒg‚ß‚ñ‚Ç‚¢‚©‚çQÆ‚ÍŠ‡ŒÊ‚Â‚¯‚é
+	// ã‚­ãƒ£ã‚¹ãƒˆã‚ã‚“ã©ã„ã‹ã‚‰å‚ç…§æ™‚ã¯æ‹¬å¼§ã¤ã‘ã‚‹
 	int operator()(){
 		return get();
 	}
@@ -55,7 +55,7 @@ struct RGB_prop{
 class RGB {
 	int data;
 public:
-	//‰Šú‰»‘ã“ü‚í‚©‚ç‚ñ‚Ì‚ÅŠÖ”‰»
+	//åˆæœŸåŒ–ä»£å…¥ã‚ã‹ã‚‰ã‚“ã®ã§é–¢æ•°åŒ–
 	void assign_RGB(){
 		R.data = &data;
 		R.color = 8;
@@ -78,7 +78,7 @@ public:
 		assign_RGB();
 	}
 
-	//@ƒvƒƒpƒeƒB‚à‚Ç‚«‚Æ“Yš‰‰Zq‚ÅŠy‚µ‚½‚¢
+	//ã€€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚‚ã©ãã¨æ·»å­—æ¼”ç®—å­ã§æ¥½ã—ãŸã„
     RGB_prop R,G,B;
     RGB_prop operator[](int i){
 		switch(i){
@@ -98,7 +98,7 @@ public:
     	data = v;
     }
 
-	// getter setter ‘½•ªg‚í‚È‚¢‚©‚à
+	// getter setter å¤šåˆ†ä½¿ã‚ãªã„ã‹ã‚‚
 	int getR(){
 		return (int)(data & 0x0f00 >> 8);
 	}

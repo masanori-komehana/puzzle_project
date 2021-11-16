@@ -7,9 +7,14 @@
 
 #include "Pazzle15mid.h"
 
+Pazzle15_mid::Pazzle15_mid(LEDMAT &mat) {
+	set_led_mat(mat);
+}
+
 Pazzle15_mid::Pazzle15_mid() {
 	// TODO Auto-generated constructor stub
 	disp_mat = DOTMAT(32, 32);
+	timer_active = false;
 }
 
 Pazzle15_mid::~Pazzle15_mid() {
@@ -18,15 +23,18 @@ Pazzle15_mid::~Pazzle15_mid() {
 
 
 
-int Pazzle15_mid::is_timcnt(){return 0;}
-void Pazzle15_mid::start_tim(){;}
-void Pazzle15_mid::stop_tim(){;}
-void Pazzle15_mid::toggle_tim(){;}
+bool Pazzle15_mid::is_timcnt(){return timer_active;}
+void Pazzle15_mid::start_tim(){timer_active = true;}
+void Pazzle15_mid::stop_tim(){timer_active = false;}
+void Pazzle15_mid::toggle_tim(){timer_active = !timer_active;}
 
 
 int Pazzle15_mid::get_game_dat(){return 0;}
 
-void Pazzle15_mid::disp_update(){;}
+void Pazzle15_mid::disp_update(){
+	led_mat->clr();
+
+}
 void Pazzle15_mid::set_disp_data(){;}
 
 int Pazzle15_mid::get_disp_data(int, int){return 0;}

@@ -11,6 +11,8 @@
 #include <main.h>
 #include <stdlib.h>
 
+#include "pazzle_project.h"
+
 #include "Pazzle15mid.h"
 #include "Timer10ms.h"
 
@@ -21,7 +23,7 @@ public:
 };
 
 
-// ƒQ[ƒ€ŠÇ—ƒf[ƒ^
+// ã‚²ãƒ¼ãƒ ç®¡ç†ãƒ‡ãƒ¼ã‚¿
 typedef struct TAG_GAME_DATA{
 	int flg;
 	int state;
@@ -29,15 +31,16 @@ typedef struct TAG_GAME_DATA{
 	Timer10ms pzt;
 } GAME_DATA;
 
-// ó‘Ô
+// çŠ¶æ…‹
 enum TState{
-	// ‰Šúó‘Ô
+	// åˆæœŸçŠ¶æ…‹
 	STATE_INIT,
-	// ƒpƒYƒ‹is’†
+	// ãƒ‘ã‚ºãƒ«é€²è¡Œä¸­
 	STATE_PAZZLE,
-	//@ƒNƒŠƒA‰æ–Ê•\¦
+	//ã€€ã‚¯ãƒªã‚¢ç”»é¢è¡¨ç¤º
 	STATE_CLEAR,
 };
+
 
 enum TPazzleDifficulty{
 	_EASY,

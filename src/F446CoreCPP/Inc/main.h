@@ -23,7 +23,6 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -39,12 +38,6 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
-
-#define SW_NUM 7
-#define TICKS_1S 3200
-
-
-
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -57,13 +50,12 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
-void  init_system(void);
-void waite_func(int);
 
 /* USER CODE END EFP */
 
@@ -107,8 +99,6 @@ void waite_func(int);
 #define LEDMAT_PB7_OE_Pin GPIO_PIN_7
 #define LEDMAT_PB7_OE_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
-
 
 /* USER CODE END Private defines */
 

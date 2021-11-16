@@ -8,17 +8,29 @@
 #ifndef SRC_PAZZLE15MID_H_
 #define SRC_PAZZLE15MID_H_
 
+#include "pazzle_project.h"
+
+#include "Timer10ms.h"
 #include "DOTMAT.h"
+#include "LEDMAT.h"
 
 class Pazzle15_mid {
 private:
+	LEDMAT *led_mat;
 	DOTMAT disp_mat;
+	Timer10ms tim;
+	bool timer_active;
 public:
 	Pazzle15_mid();
+	Pazzle15_mid(LEDMAT&);
 	virtual ~Pazzle15_mid();
 
+	void set_led_mat(LEDMAT& m){
+		led_mat = &m;
+	}
 
-	int is_timcnt();
+
+	bool is_timcnt();
 	void start_tim();
 	void stop_tim();
 	void toggle_tim();
