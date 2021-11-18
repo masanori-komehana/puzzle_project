@@ -18,11 +18,18 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
+#include <main.h>
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <vector>
 
+#include "pazzle_project.h"
+#include "FLGManager.h"
+#include "LEDMAT.h"
+
+//#include "LEDMATDISPTEST.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +52,8 @@ TIM_HandleTypeDef htim3;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
+FLGManager fmng;
+LEDMAT led_mat(32);
 
 /* USER CODE END PV */
 
@@ -54,7 +63,7 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
-
+void test_cp_ledmat(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -62,19 +71,43 @@ static void MX_TIM3_Init(void);
 
 /* USER CODE END 0 */
 
-
 /**
   * @brief This function handles System tick timer.
   */
-void SysTick_Handler(void)
+extern "C" void SysTick_Handler(void)
 {
-  /* USER CODE BEGIN SysTick_IRQn 0 */
+    /* USER CODE BEGIN SysTick_IRQn 0 */
+    static int time_1s = 1;
+    static int pwm = 0;
+    static int line = 0;
+    /* USER CODE END SysTick_IRQn 0 */
+    HAL_IncTick();
+    /* USER CODE BEGIN SysTick_IRQn 1 */
+    if (time_1s == TICKS_1S){
+    	fmng.set_flg(EN_1s);
+    	time_1s = 1;
+    //		if(USART2->SR & USART_SR_TXE_Msk)
+    //			USART2->DR = 'U';
+    //		piece_select = (piece_select+1) % 16 ;
+    } else {
+        time_1s++;
+    }
 
-  /* USER CODE END SysTick_IRQn 0 */
-//  HAL_IncTick();
-  /* USER CODE BEGIN SysTick_IRQn 1 */
+//    if(my_usart.is_data_recv()){
+//    	fmng->set_flg(RECV_USART);
+//    }
 
-  /* USER CODE END SysTick_IRQn 1 */
+    led_mat.send_line(pwm, line, 23);
+
+	if (line>=15){
+		line = 0;
+		pwm = (pwm+1)%3;
+	}else{
+		line++;
+	}
+
+
+    /* USER CODE END SysTick_IRQn 1 */
 }
 
 /**
@@ -83,43 +116,134 @@ void SysTick_Handler(void)
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
+	/* USER CODE BEGIN 1 */
+	int cnt = 0;
+	/* USER CODE END 1 */
 
-  /* USER CODE END 1 */
+	/* MCU Configuration--------------------------------------------------------*/
 
-  /* MCU Configuration--------------------------------------------------------*/
+	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	HAL_Init();
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	/* USER CODE BEGIN Init */
 
-  /* USER CODE BEGIN Init */
+	/* USER CODE END Init */
 
-  /* USER CODE END Init */
+	/* Configure the system clock */
+	SystemClock_Config();
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	/* USER CODE BEGIN SysInit */
+	uint32_t sysClk;
+	SystemCoreClockUpdate();
+	sysClk = SystemCoreClock;
 
-  /* USER CODE BEGIN SysInit */
+	SysTick_Config(sysClk / TICKS_1S);
 
-  /* USER CODE END SysInit */
+	/* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_USART2_UART_Init();
-  MX_TIM3_Init();
-  /* USER CODE BEGIN 2 */
+	/* Initialize all configured peripherals */
+	MX_GPIO_Init();
+	MX_USART2_UART_Init();
+	MX_TIM3_Init();
+	/* USER CODE BEGIN 2 */
+	GPIOA->ODR = 0x0;
+	GPIOB->ODR = 0x0;
 
-  /* USER CODE END 2 */
+	/* USER CODE END 2 */
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
+	while (1)
+	{
+		/* USER CODE END WHILE */
+		test_cp_ledmat();
+		cnt=cnt+1;
+		/* USER CODE BEGIN 3 */
+	}
+/* USER CODE END 3 */
+}
 
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+void test_cp_ledmat(){
+	static int font1_data[4][8]={
+		{0x20,0x7c,0x20,0x3c,0x6a,0xb2,0x64,0x0},
+		{0x0,0x88,0x84,0x82,0x82,0x50,0x20,0x0},
+		{0x78,0x0,0x78,0x84,0x4,0x8,0x70,0x0},
+		{0x78,0x0,0xf8,0x10,0x30,0x50,0x8c,0x0}
+	};
+	static int font2_data[4][8]={
+		{0xfc,0x84,0x84,0xfc,0x84,0x84,0xfc,0x0},
+		{0x3e,0x22,0x3e,0x22,0x3e,0x42,0x86,0x0},
+		{0x10,0x10,0x54,0x58,0x10,0x28,0xc6,0x0},
+		{0x10,0x12,0xf4,0x38,0x54,0x92,0x30,0x0}
+	};
+	static int font3_data[4][8]={
+		{0x10,0xfe,0x10,0x38,0x54,0x92,0x10,0x0},
+		{0x10,0x28,0xfe,0x10,0xfe,0x54,0xfe,0x0},
+		{0x10,0x10,0x7c,0x10,0x10,0x10,0xfe,0x0},
+		{0x28,0x7e,0xc8,0x5c,0x5c,0x6a,0x48,0x0}
+	};
+	static int font4_data[4][8]={
+		{0x8,0x7e,0x52,0x5e,0x72,0x5a,0x96,0x0},
+		{0x10,0xfe,0x92,0x92,0xfe,0x10,0x10,0x0},
+		{0x5c,0x94,0x5c,0xb4,0x5c,0xd4,0x7e,0x0},
+		{0x98,0x48,0x8,0xd4,0x62,0x40,0xbe,0x0}
+	};
+	static int data[4][8];
+	static int color[4] = {
+		0x300, 0x030, 0x003, 0x333
+	};
+	static char mes[32][36];
+	for (int i = 0; i < 8; ++i) {
+		data[0][i]  = 0x00000000;
+		data[0][i] |=(font1_data[0][i])<<24;
+		data[0][i] |=(font1_data[1][i])<<16;
+		data[0][i] |=(font1_data[2][i])<<8;
+		data[0][i] |=(font1_data[3][i]);
+
+		data[1][i]  = 0x00000000;
+		data[1][i] |=(font2_data[0][i])<<24;
+		data[1][i] |=(font2_data[1][i])<<16;
+		data[1][i] |=(font2_data[2][i])<<8;
+		data[1][i] |=(font2_data[3][i]);
+
+		data[2][i]  = 0x00000000;
+		data[2][i] |=(font3_data[0][i])<<24;
+		data[2][i] |=(font3_data[1][i])<<16;
+		data[2][i] |=(font3_data[2][i])<<8;
+		data[2][i] |=(font3_data[3][i]);
+
+		data[3][i]  = 0x00000000;
+		data[3][i] |=(font4_data[0][i])<<24;
+		data[3][i] |=(font4_data[1][i])<<16;
+		data[3][i] |=(font4_data[2][i])<<8;
+		data[3][i] |=(font4_data[3][i]);
+	}
+	for (int i = 0; i < 4; ++i) {
+		led_mat.cpMat(8*i, 0, 32, 8, color[i], data[i]);
+	}
+	for (int i = 0; i < 32; ++i) {
+		for (int j = 0; j < 32; ++j) {
+			switch(led_mat[i][j]()){
+			case 0x300:
+				mes[i][j] = 'R';
+				break;
+			case 0x030:
+				mes[i][j] = 'G';
+				break;
+			case 0x003:
+				mes[i][j] = 'B';
+				break;
+			case 0x333:
+				mes[i][j] = 'W';
+				break;
+			default:
+				mes[i][j] = 'x';
+				break;
+			}
+		}
+		mes[i][32] = 0;
+	}
+	mes[31][33] = mes[31][33] + 0;
 }
 
 /**
