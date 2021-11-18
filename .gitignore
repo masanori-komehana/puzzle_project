@@ -1,3 +1,6 @@
+.DS_Store
 document/build
 TS_Projects
-
+*.o
+*.out
+test
