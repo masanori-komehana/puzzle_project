@@ -96,8 +96,8 @@ void DOTMAT::cpMat(int row, int col, int w,int h, int color,int lines[]) {
 				sp_flg = 1;
 			}
 			// if(flg2) cout << hex << setw(3) << setfill('0') << rgbline[j]->getColor() << " -> ";
-			if(flg & FLG(w-j-1)) rgbline->get(j)->setColor(color);
-			else rgbline->get(j)->setColor(0);
+			if(flg & FLG(w-j-1)) rgbline->get(j+col)->setColor(color);
+			else rgbline->get(j+col)->setColor(0);
 			// if(flg2) cout << hex << setw(3) << setfill('0') << rgbline[j]->getColor() << endl;
 		}
 	}
