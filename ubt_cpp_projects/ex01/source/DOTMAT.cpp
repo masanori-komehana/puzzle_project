@@ -84,7 +84,7 @@ void DOTMAT::cpMat(int row, int col, int w,int h, int color,int lines[]) {
 
 		int flg = lines[i];
 		int flg2;
-		RGB_DATALINE *rgbline = &dot_data[row+i];
+		RGB_DATALINE &rgbline = dot_data[row+i];
 		// if(i == 0) cout << "flg & FLG(w-j-1)" << endl;
 		for (int j = 0; j < w; ++j) {
 			flg2 = 0;
@@ -96,8 +96,8 @@ void DOTMAT::cpMat(int row, int col, int w,int h, int color,int lines[]) {
 				sp_flg = 1;
 			}
 			// if(flg2) cout << hex << setw(3) << setfill('0') << rgbline[j]->getColor() << " -> ";
-			if(flg & FLG(w-j-1)) rgbline->get(j+col)->setColor(color);
-			else rgbline->get(j+col)->setColor(0);
+			if(flg & FLG(w-j-1)) rgbline[j+col]->setColor(color);
+			else rgbline[j+col]->setColor(0);
 			// if(flg2) cout << hex << setw(3) << setfill('0') << rgbline[j]->getColor() << endl;
 		}
 	}
