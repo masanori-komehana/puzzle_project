@@ -16,7 +16,7 @@
 
 
 class RGB_DATALINE {
-	
+
 private:
 	int length;
 	std::vector<RGB> data_line;
@@ -28,7 +28,7 @@ public:
 	// operator
 	RGB* operator[](int i);
 	//
-
+	RGB* get(int i);
 };
 
 #endif /* SRC_RGBDATALINE_H_ */

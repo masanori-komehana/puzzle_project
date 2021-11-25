@@ -1,7 +1,7 @@
 #include "RGB.h"
 
 
-int dbg_FLG = 1;
+int dbg_FLG = 0;
 
 
 //初期化代入わからんので関数化
@@ -55,14 +55,14 @@ int RGB::getColor(){
     return data;
 }
 void RGB::setColor(int color){
-    if(color != 0 && dbg_FLG){
-        cout <<setw(3)<<setfill('0')<< this->data << endl;
-    }
+    // if(color != 0 && dbg_FLG){
+    //     cout <<setw(3)<<setfill('0')<< this->data << endl;
+    // }
     this->data = color;
-    if(color != 0 && dbg_FLG){
-        dbg_FLG = 0;
-        cout <<setw(3)<<setfill('0')<< this->data << endl;
-    }
+    // if(color != 0 && dbg_FLG){
+    //     // dbg_FLG = 0;
+    //     // cout <<setw(3)<<setfill('0')<< this->data << endl;
+    // }
 }
 
 // getter setter 多分使わないかも

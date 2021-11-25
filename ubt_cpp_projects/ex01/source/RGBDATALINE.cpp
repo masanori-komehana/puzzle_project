@@ -25,6 +25,11 @@ RGB_DATALINE::~RGB_DATALINE() {
 
 
 RGB* RGB_DATALINE::operator[](int i){
+	return this->get(i);
+}
+
+
+RGB* RGB_DATALINE::get(int i){
 	RGB * rgb = &data_line[i];
 	return rgb;
 }

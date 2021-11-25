@@ -75,11 +75,11 @@ void test_cp_ledmat(){
 	}
 	for (int i = 0; i < 32; ++i) {
 		for (int j = 0; j < 32; ++j) {
-			// cout<<setw(3)<<setfill('0')<<led_mat[i][j]->getColor();
-			// cout<<',';
+			cout<<setw(3)<<setfill('0')<<led_mat[i][j]->getColor();
+			cout<<',';
 		}
 		mes[i][32] = 0;
-        // cout << endl;
+        cout << endl;
 	}
 	mes[31][33] = mes[31][33] + 0;
 }
