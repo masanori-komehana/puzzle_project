@@ -7,6 +7,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 /* Exported types ------------------------------------------------------------*/
 

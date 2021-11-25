@@ -8,6 +8,9 @@
 #ifndef SRC_LEDMAT_H_
 #define SRC_LEDMAT_H_
 
+
+#include "pazzle_project.h"
+
 #include "DOTMAT.h"
 
 #define A_HI 0x1

@@ -11,7 +11,6 @@ void test_cp_ledmat(void);
 
 int main(void)
 {
-	int cnt = 0;
     test_cp_ledmat();
     return 0;
 }
@@ -76,28 +75,11 @@ void test_cp_ledmat(){
 	}
 	for (int i = 0; i < 32; ++i) {
 		for (int j = 0; j < 32; ++j) {
-			switch(led_mat[i][j]()){
-			case 0x300:
-				mes[i][j] = 'R';
-				break;
-			case 0x030:
-				mes[i][j] = 'G';
-				break;
-			case 0x003:
-				mes[i][j] = 'B';
-				break;
-			case 0x333:
-				mes[i][j] = 'W';
-				break;
-			default:
-				mes[i][j] = 'x';
-				break;
-			}
-            cout << mes[i][j];
+			// cout<<setw(3)<<setfill('0')<<led_mat[i][j]->getColor();
+			// cout<<',';
 		}
 		mes[i][32] = 0;
-        cout << endl;
+        // cout << endl;
 	}
 	mes[31][33] = mes[31][33] + 0;
 }
-

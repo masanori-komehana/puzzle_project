@@ -8,8 +8,14 @@
 #ifndef SRC_DOTMAT_H_
 #define SRC_DOTMAT_H_
 
-#include <vector>
+#include "pazzle_project.h"
 #include "RGBDATALINE.h"
+
+#include <vector>
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 class DOTMAT {
 protected:

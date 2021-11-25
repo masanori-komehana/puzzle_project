@@ -9,7 +9,7 @@
 
 
 RGB LEDMAT::DOT(int i, int j){
-	return dot_data[i][j];
+	return *dot_data[i][j];
 }
 
 
@@ -35,12 +35,12 @@ void LEDMAT::send_line(int pwm, int line_index, int oetime=23){
 
 			//データ統合
 			rgb_data = 0;
-			rgb_data |= ((line0[clk_cnt].R() > pwm)?1:0) << 6;
-			rgb_data |= ((line1[clk_cnt].R() > pwm)?1:0) << 7;
-			rgb_data |= ((line0[clk_cnt].G() > pwm)?1:0) << 8;
-			rgb_data |= ((line1[clk_cnt].G() > pwm)?1:0) << 9;
-			rgb_data |= ((line0[clk_cnt].B() > pwm)?1:0) << 10;
-			rgb_data |= ((line1[clk_cnt].B() > pwm)?1:0) << 11;
+			rgb_data |= ((line0[clk_cnt]->R() > pwm)?1:0) << 6;
+			rgb_data |= ((line1[clk_cnt]->R() > pwm)?1:0) << 7;
+			rgb_data |= ((line0[clk_cnt]->G() > pwm)?1:0) << 8;
+			rgb_data |= ((line1[clk_cnt]->G() > pwm)?1:0) << 9;
+			rgb_data |= ((line0[clk_cnt]->B() > pwm)?1:0) << 10;
+			rgb_data |= ((line1[clk_cnt]->B() > pwm)?1:0) << 11;
 			//データ出力
 			//GPIOA->ODR &= ~RGB_MASK | rgb_data ;
 			//GPIOA->ODR |= RGB_MASK & rgb_data ;
@@ -74,7 +74,7 @@ void LEDMAT::send_line(int pwm, int line_index, int oetime=23){
 }
 
 
-int getRGBdata(int pwm, RGB rgb0, RGB rgb1){
+int getRGBdata(int pwm, RGB &rgb0, RGB &rgb1){
 	static int _rgb_data = 0;
 	_rgb_data |= ((rgb0.R() > pwm)?1:0) << 6;
 	_rgb_data |= ((rgb1.R() > pwm)?1:0) << 7;
