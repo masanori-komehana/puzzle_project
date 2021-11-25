@@ -28,7 +28,7 @@ RGB::RGB(int r, int g, int b){
 }
 
 
-RGB_prop RGB::operator[](int i){
+RGB_prop& RGB::operator[](int i){
     switch(i){
     case 0: return R;
     case 1: return G;
@@ -55,14 +55,7 @@ int RGB::getColor(){
     return data;
 }
 void RGB::setColor(int color){
-    // if(color != 0 && dbg_FLG){
-    //     cout <<setw(3)<<setfill('0')<< this->data << endl;
-    // }
     this->data = color;
-    // if(color != 0 && dbg_FLG){
-    //     // dbg_FLG = 0;
-    //     // cout <<setw(3)<<setfill('0')<< this->data << endl;
-    // }
 }
 
 // getter setter 多分使わないかも

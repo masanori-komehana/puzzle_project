@@ -29,7 +29,7 @@ public:
 	virtual ~DOTMAT();
 	void init(int, int);
 	void reserve_push();
-	RGB_DATALINE operator[](int);
+	RGB_DATALINE& operator[](int);
 
 	void clr();
 

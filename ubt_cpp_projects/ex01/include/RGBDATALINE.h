@@ -26,9 +26,9 @@ public:
 	RGB_DATALINE(int);
 	virtual ~RGB_DATALINE();
 	// operator
-	RGB* operator[](int i);
+	RGB& operator[](int i);
 	//
-	RGB* get(int i);
+	RGB& get(int i);
 };
 
 #endif /* SRC_RGBDATALINE_H_ */
