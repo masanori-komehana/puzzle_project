@@ -1,0 +1,33 @@
+#ff0000 #ffbe00
+#ff6000 #e1ff00
+#ffbf00 #81ff00
+#dfff00 #22ff00
+#80ff00 #00ff3e
+#20ff00 #00ff9e
+#00ff40 #00fffd
+#00ff9f #00a1ff
+#00ffff #0041ff
+#009fff #1e00ff
+#0040ff #7e00ff
+#2000ff #dd00ff
+#8000ff #ff00c1
+#df00ff #ff0061
+#ff00bf #ff0002
+#ff0060 #ff5e00
+
+01 :#ff0000 #ffbe00
+02 :#ff6600 #daff00
+03 :#ffcc00 #74ff00
+04 :#ccff00 #0eff00
+05 :#66ff00 #00ff58
+06 :#00ff00 #00ffbe
+07 :#00ff66 #00daff
+08 :#00ffcc #0074ff
+09 :#00ccff #000eff
+10 :#0066ff #5800ff
+11 :#0000ff #be00ff
+12 :#6600ff #ff00da
+13 :#cc00ff #ff0074
+14 :#ff00cc #ff000e
+15 :#ff0066 #ff5800
+
