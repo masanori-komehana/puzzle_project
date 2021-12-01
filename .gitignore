@@ -4,3 +4,4 @@ TS_Projects
 *.o
 *.out
 test
+~$*
