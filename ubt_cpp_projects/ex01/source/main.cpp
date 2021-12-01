@@ -75,7 +75,7 @@ void test_cp_ledmat(){
 	}
 	for (int i = 0; i < 32; ++i) {
 		for (int j = 0; j < 32; ++j) {
-			cout<<hex<<setw(3)<<setfill('0')<<led_mat[i][j]->getColor();
+			cout<<hex<<setw(3)<<setfill('0')<<led_mat[i][j]();
 			cout<<',';
 		}
 		mes[i][32] = 0;

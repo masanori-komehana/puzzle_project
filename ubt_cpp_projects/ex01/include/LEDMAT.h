@@ -42,7 +42,7 @@ public:
 	LEDMAT(int w,int h):DOTMAT(w, h){}
 	LEDMAT(int size):DOTMAT(size) {}
 	LEDMAT();
-	RGB DOT(int,int);
+	RGB & DOT(int,int);
 	void send_line(int, int, int);
 
 

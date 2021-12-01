@@ -64,7 +64,7 @@ public:
 
     //　プロパティもどきと添字演算子で楽したい
     RGB_prop R,G,B;
-    RGB_prop operator[](int i);
+    RGB_prop & operator[](int i);
 
 	int operator()();
 
