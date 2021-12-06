@@ -18,6 +18,7 @@
 
 ```eval_rst
 .. mermaid::
+
     graph TD;
 
         subgraph sysTickHandler;
