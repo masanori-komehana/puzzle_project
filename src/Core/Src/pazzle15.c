@@ -19,8 +19,9 @@ int board[4][4] = {
 
 
 
-void pazzle_move(int move_direction){
+int pazzle_move(int move_direction){
 	int is_move = 0;
+	int moved = 0;
 	POS blank_pos = get_blank_pos();
 	POS mov_pos = blank_pos;
 	switch (move_direction) {
@@ -56,12 +57,13 @@ void pazzle_move(int move_direction){
 		if (get_state() == STATE_INIT)
 			state_change(STATE_PAZZLE);
 		if (get_state() == STATE_PAZZLE){
-			move_blank(mov_pos);
+			moved = move_blank(mov_pos);
 			if(is_game_clear()){
 				state_change(STATE_CLEAR);
 			}
 		}
 	}
+	return moved;
 }
 
 POS get_blank_pos(void)
@@ -80,14 +82,14 @@ POS get_blank_pos(void)
     return blank_pos;
 }
 
-void move_blank(POS mov_pos)
+int move_blank(POS mov_pos)
 {
     if (mov_pos.col < 0
 		|| mov_pos.col >= BOARD_SIZE
 		|| mov_pos.row < 0
 		|| mov_pos.row >= BOARD_SIZE)
     {
-        return;
+        return 0;
     }
 
     POS blank_pos = get_blank_pos();
@@ -96,6 +98,8 @@ void move_blank(POS mov_pos)
     int tempBlank = board[blank_pos.row][blank_pos.col];
     board[blank_pos.row][blank_pos.col] = board[mov_pos.row][mov_pos.col];
     board[mov_pos.row][mov_pos.col] = tempBlank;
+
+    return 1;
 }
 
 
@@ -138,14 +142,3 @@ int is_game_clear(void){
 	return flg_game_clear;
 }
 
-void pazzle_esc(void){
-	switch(get_state()){
-	case STATE_INIT:
-		break;
-	case -1:
-	case STATE_PAZZLE:
-	case STATE_CLEAR:
-		state_change(STATE_INIT);
-		break;
-	}
-}

@@ -64,12 +64,21 @@ typedef struct TAG_SW_IF{
 	uint32_t up;
 } SW_IF;
 
+typedef struct TAG_LP_IF{
+	GPIOx reg;
+	int32_t port_num;
+	int32_t is_long_push;
+	int32_t lp_start;
+	int32_t en_cnt;
+} LP_IF;
+
 // ゲーム管理データ
 typedef struct TAG_GAME_DATA{
 	int flg;
 	int state;
 	int posedge_buttons;
 	Pazzle_time * pzt;
+	int move_cnt;
 } GAME_DATA;
 
 
@@ -90,6 +99,8 @@ enum TGeneralFlgs {
 	EN_10ms,
 	// 何かのスイッチ押された
 	SW_POSEDGE,
+	// 何かのスイッチ長押し
+	SW_LP,
 	// USBになんか来た
 	RECV_USART,
 };
@@ -98,6 +109,9 @@ enum TGeneralFlgs {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+
+#define NUM_SWIF 7
+#define NUM_LPIF 7
 
 /* USER CODE END EC */
 
@@ -134,9 +148,15 @@ void show_clear_disp(Pazzle_time *);
 void show_clear_lt1min(Pazzle_time *);
 void show_clear_lt10min(Pazzle_time *);
 void show_clear_gt10min(Pazzle_time *);
+int get_7seg_dot (int, int);
+
+int pzt_toint(Pazzle_time * pzt);
 void add_10ms(Pazzle_time *);
 void clr_pzltim(Pazzle_time *);
-int get_7seg_dot (int, int);
+
+void usart2_send_time(void);
+void usart2_tx(char* out_dtr);
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

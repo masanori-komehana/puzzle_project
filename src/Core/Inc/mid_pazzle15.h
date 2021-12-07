@@ -44,22 +44,23 @@ enum TPazzleCmd{
 void cp_data(int, int[16][3], int[16], int[16], int[16], int[16], int[16], int[16]);
 void waite_func(int);
 
-void set_flg();
-int get_flg();
+void set_flg(void);
+int get_flg(void);
 
-int is_timcnt();
-void start_tim();
-void stop_tim();
-void toggle_tim();
+int is_timcnt(void);
+void start_tim(void);
+void stop_tim(void);
+void toggle_tim(void);
 
 
-int get_state();
+int get_state(void);
 void state_change(int);
 
-int get_game_dat();
+int get_game_dat(void);
 
-void disp_update();
-void set_disp_data();
+void disp_update(void);
+void set_disp_data(void);
+void pazzle_esc(void);
 
 int get_disp_data(int, int);
 

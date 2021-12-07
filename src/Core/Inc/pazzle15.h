@@ -30,11 +30,10 @@ enum TMoveDirection{
 };
 
 
-void pazzle_move(int);
+int pazzle_move(int);
 
 POS get_blank_pos(void);
-void move_blank(POS);
-void pazzle_esc(void);
+int move_blank(POS);
 
 void board_init(void);
 void board_shuffle(int, int);

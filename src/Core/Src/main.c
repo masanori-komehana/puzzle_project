@@ -24,8 +24,11 @@
 /* USER CODE BEGIN Includes */
 #include "stm32f4xx.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
+
 
 
 /* USER CODE END Includes */
@@ -141,6 +144,8 @@ GAME_DATA game_dat = {
 	0,
 	//Pazzle_time * pzt;
 	&pazzle_time,
+	//int move_cnt;
+	0,
 };
 
 //
@@ -154,14 +159,38 @@ SW_IF swc1 = {GPIOC, 1, 0, 0, 0, 0, 0, 0};
 SW_IF swc2 = {GPIOC, 2, 0, 0, 0, 0, 0, 0};
 SW_IF swc3 = {GPIOC, 3, 0, 0, 0, 0, 0, 0};
 SW_IF swc4 = {GPIOC, 4, 0, 0, 0, 0, 0, 0};
+SW_IF swc5 = {GPIOC, 5, 0, 0, 0, 0, 0, 0};
+SW_IF swc6 = {GPIOC, 6, 0, 0, 0, 0, 0, 0};
 
-SW_IF * sw_all[5] = {
+SW_IF * sw_all[NUM_SWIF] = {
 	&swc0,
 	&swc1,
 	&swc2,
 	&swc3,
 	&swc4,
+	&swc5,
+	&swc6,
 };
+
+
+LP_IF lpc0 = {GPIOC, 0, 0, 0, 0};
+LP_IF lpc1 = {GPIOC, 1, 0, 0, 0};
+LP_IF lpc2 = {GPIOC, 2, 0, 0, 0};
+LP_IF lpc3 = {GPIOC, 3, 0, 0, 0};
+LP_IF lpc4 = {GPIOC, 4, 0, 0, 0};
+LP_IF lpc5 = {GPIOC, 5, 0, 0, 0};
+LP_IF lpc6 = {GPIOC, 6, 0, 0, 0};
+
+LP_IF * lp_all[NUM_LPIF] = {
+	&lpc0,
+	&lpc1,
+	&lpc2,
+	&lpc3,
+	&lpc4,
+	&lpc5,
+	&lpc6,
+};
+
 
 // 駒の色データ--------------------------------------------------------------------
 int rgb_data1[16][3] = {
@@ -194,6 +223,8 @@ static void MX_USART2_UART_Init(void);
 int is_push(SW_IF *);
 int is_posedge(SW_IF *);
 
+int cnt_long_push(LP_IF *);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -219,14 +250,20 @@ void SysTick_Handler(void){
 		if(is_timcnt()){
 			add_10ms(game_dat.pzt);
 		}
-		for (int i = 0; i < 5; ++i) {
+		for (int i = 0; i < NUM_SWIF; ++i) {
 			if(is_posedge(sw_all[i])){
 				game_dat.flg |= FLG(SW_POSEDGE);
+
 			}
 		}
 	}
 
-	
+	for (int i = 0; i < NUM_LPIF; ++i) {
+		if(cnt_long_push(lp_all[i]) > TICKS_1S){
+			lp_all[i]->is_long_push = 1;
+			SET_FLG(game_dat.flg, SW_LP);
+		}
+	}
 
 	if(delay_time==0)
 	  delay_time=0;
@@ -382,22 +419,48 @@ int main(void)
 				game_dat.flg |= FLG(CLS);
 				cl_disp_data();
 			}
-			for (int i = 0; i < 5; ++i) {
+			for (int i = 0; i < NUM_SWIF; ++i) {
 				int direction = MOVE_NO_MOVE;
 				if(sw_all[i]->up){
 					sw_all[i]->up = 0;
 //					pazzle_move(i);
 					switch(i){
-					case BTN_ESC:	pazzle_esc(); break;
+					case BTN_ESC:
+						switch(get_state()){
+						case STATE_PAZZLE:
+							break;
+						default:
+							pazzle_esc();
+						}
+						break;
 					case BTN_LEFT:	direction = MOVE_LEFT;	break;
 					case BTN_DOWN:	direction = MOVE_DOWN;	break;
-					case BTN_UP:	direction = MOVE_UP;	break;
+					case BTN_UP:	direction = MOVE_UP;		break;
 					case BTN_RIGHT:	direction = MOVE_RIGHT;	break;
 					default: break;
 					}
 					if (direction != MOVE_NO_MOVE){
 						pazzle_move(direction);
+						game_dat.move_cnt++;
 					}
+//					USART2->DR = '0' + i;
+				}
+			}
+		}
+		if (HAS_FLG(game_dat.flg, SW_LP)){
+			CLR_FLG(game_dat.flg, SW_LP);
+			for (int i = 0; i < NUM_SWIF; ++i) {
+				if(lp_all[i]->is_long_push){
+					lp_all[i]->is_long_push = 0;
+//					pazzle_move(i);
+					switch(i){
+					case BTN_ESC:
+						if(get_state() == STATE_PAZZLE) pazzle_esc();
+						break;
+					default: break;
+					}
+
+//					USART2->DR = '0' + i;
 				}
 			}
 		}
@@ -405,7 +468,10 @@ int main(void)
 			game_dat.flg &= ~FLG(EN_1s);
 		}
 		if (game_dat.flg & FLG(RECV_USART)){
+			int moved = 0;
+
 			game_dat.flg &= ~FLG(RECV_USART);
+
 			usart_dat = USART2->DR;
 			//USART2->DR = usart_dat;
 			if(game_dat.state!=-1){
@@ -417,16 +483,16 @@ int main(void)
 				pazzle_esc();
 				break;
 			case 'w':
-				pazzle_move(MOVE_UP);
+				moved = pazzle_move(MOVE_UP);
 				break;
 			case 'a':
-				pazzle_move(MOVE_LEFT);
+				moved = pazzle_move(MOVE_LEFT);
 				break;
 			case 's':
-				pazzle_move(MOVE_DOWN);
+				moved = pazzle_move(MOVE_DOWN);
 				break;
 			case 'd':
-				pazzle_move(MOVE_RIGHT);
+				moved = pazzle_move(MOVE_RIGHT);
 				break;
 			case 'z':
 				board_init();
@@ -434,8 +500,9 @@ int main(void)
 			case 'Z':
 				state_change(STATE_CLEAR);
 				break;
-			case 'x':
+			case 'x':{
 				stop_tim();
+			}
 				break;
 			case 'X':
 				start_tim();
@@ -446,13 +513,21 @@ int main(void)
 				}
 				break;
 			case 'C':
+				if (game_dat.move_cnt > 0){
+					game_dat.move_cnt = -1;
+					usart2_send_time();
+				}
 				game_dat.state = STATE_INIT;
+				game_dat.move_cnt = 0;
 				clr_pzltim(game_dat.pzt);
 				board_init();
 				board_shuffle(100, 96);
 				break;
 			default:
 				break;
+			}
+			if (moved){
+				game_dat.move_cnt++;
 			}
 		}
 
@@ -962,6 +1037,15 @@ void show_clear_gt10min(Pazzle_time *pz){
 			pz->sec%10,
 	};
 
+	if(pz->min > 99){
+		int time_max[] = {
+			9, 9, 5, 9
+		};
+		for (int i = 0; i < 4; ++i) {
+			time_data[i] = time_max[i];
+		}
+	}
+
 	cp_disp_data(disp_data, time_data, shift_data);
 }
 
@@ -1018,17 +1102,16 @@ int get_7seg_dot (int n, int line)
     return dot;
 }
 
+int pzt_toint(Pazzle_time * pzt){
+	return pzt->min*6000 + pzt->sec*100 + pzt->ms10;
+}
+
 void add_10ms(Pazzle_time *pz){
 	if(pz->ms10 == 99){
 		pz->ms10 = 0;
 		if (pz->sec == 59){
 			pz->sec = 0;
-			if(pz->min==99){
-				pz->ms10 = 9;
-				pz->sec = 59;
-			}else{
-				pz->min++;
-			}
+			pz->min++;
 		}else{
 			pz->sec++;
 		}
@@ -1071,6 +1154,33 @@ int is_posedge(SW_IF * sw)
 	return sw->up;
 }
 
+int cnt_long_push(LP_IF * lp){
+	static SW_IF sw;
+	sw.reg = lp->reg;
+	sw.port_num = lp->port_num;
+	if(is_push(&sw)){
+		lp->en_cnt++;
+	}else{
+		lp->en_cnt = 0;
+	}
+	return lp->en_cnt;
+}
+
+void usart2_send_time(void){
+	char c[32];
+	Pazzle_time * pzt = game_dat.pzt;
+	sprintf(c,"%d,%d\r\n", game_dat.move_cnt, pzt_toint(pzt));
+	usart2_tx(c);
+}
+
+//文字列送信
+void usart2_tx(char* out_str){
+	for(;*out_str != '\0';out_str++){//文字列の終わりでなければout_strをインクリメント
+		while((USART2->SR & 0x80)==0x0);//送信完了待ち
+		USART2->DR = *out_str;//1文字送信
+	}
+
+}
 
 /* USER CODE END 4 */
 
