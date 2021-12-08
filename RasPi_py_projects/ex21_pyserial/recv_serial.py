@@ -1,10 +1,12 @@
 #!/bin/env python3
 
-import serial
+import sys
 import time
 import threading
 import queue as Queue
 from random import choice
+
+import serial
 
 class SerCom:
     def __init__(self, tty, baud='115200'):
@@ -31,9 +33,19 @@ class SerCom:
         self.thread_r.join()
         self.ser.close()
 
-ser = SerCom('/dev/ttyACM0', '115200')
-try :
-    while True:
-        time.sleep(0.1)
-finally:
-    ser.stop()
+argv = sys.argv 
+if len(argv) < 2:
+    ser = SerCom('/dev/ttyACM0', '115200')
+    try :
+        while True:
+            time.sleep(0.1)
+    finally:
+        ser.stop()
+else:
+    ser = SerCom(argv[1], '115200')
+    try :
+        while True:
+            time.sleep(0.1)
+    finally:
+        ser.stop()
+
