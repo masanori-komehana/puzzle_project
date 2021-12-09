@@ -5,10 +5,30 @@ import java.util.Deque;
 import java.util.Random;
 
 public class Pazzle {
+    public static final int BOARD_SIZE = 4;
+    private PazzlePiece[][] board = new PazzlePiece[BOARD_SIZE][BOARD_SIZE];
+
+    private final Random r = new Random();
+    //    private static final int BLANK_NUMBER = 16;
+
+    private boolean flg_Active = false;
+
     public static Pazzle instance = new Pazzle();
 
     public static Pazzle getInstance() {
         return instance;
+    }
+
+    public boolean isActive() {
+        return flg_Active;
+    }
+
+    public void activate(){
+        flg_Active = true;
+    }
+
+    public void inactivate(){
+        flg_Active = false;
     }
 
     enum MoveDirection {
@@ -21,9 +41,6 @@ public class Pazzle {
 
 
 
-    public static final int BOARD_SIZE = 4;
-    private PazzlePiece[][] board = new PazzlePiece[BOARD_SIZE][BOARD_SIZE];
-//    private static final int BLANK_NUMBER = 16;
 
     private GridPosition blankPos;
 
@@ -44,7 +61,6 @@ public class Pazzle {
     }
 
     public boolean shuffleBoard(){
-        Random r = new Random();
         MoveDirection[] directions = {
             MoveDirection.MOVE_LEFT,
             MoveDirection.MOVE_DOWN,
@@ -78,11 +94,14 @@ public class Pazzle {
 
     public boolean moveBlank(GridPosition p){
         if(!canMove(p)){
+//            Log.i("moveBlank", String.format(Locale.JAPAN,
+//                    "Pos(%d,%d) is not able to move", p.getRow(), p.getCol()));
             return false;
         }
         PazzlePiece tempPiece = board[blankPos.getRow()][blankPos.getCol()];
         board[blankPos.getRow()][blankPos.getCol()] = board[p.getRow()][p.getCol()];
         board[p.getRow()][p.getCol()] = tempPiece;
+        blankPos = p.copy();
 
         return true;
     }
@@ -135,7 +154,11 @@ public class Pazzle {
         return true;
     }
 
-    public PazzlePiece[][] getBoard() {
-        return board;
+//    public PazzlePiece[][] getBoard() {
+//        return board;
+//    }
+
+    public PazzlePiece getBoardPiece(GridPosition p) {
+        return board[p.getRow()][p.getCol()];
     }
 }

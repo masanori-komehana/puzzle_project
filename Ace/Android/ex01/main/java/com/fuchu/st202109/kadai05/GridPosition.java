@@ -8,11 +8,19 @@ public class GridPosition {
 
     private int row;
     private int col;
-    private boolean isConst = false;
+    public final boolean isConst;
+
+    public GridPosition() {
+        this.row = 0;
+        this.col = 0;
+        isConst = false;
+    }
+
 
     public GridPosition(int row, int col) {
         this.row = row;
         this.col = col;
+        isConst = false;
     }
 
     private GridPosition(int row, int col, boolean isConst) {
