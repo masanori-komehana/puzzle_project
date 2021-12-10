@@ -3,7 +3,7 @@ drop table if EXISTS result;
 create table result(
     id integer PRIMARY KEY AUTOINCREMENT, 
     player_id integer NOT NULL,
-    pazzletime text NOT NULL,
+    pazzletime integer NOT NULL,
     movecount text integer NOT NULL, 
     playdatetime text DEFAULT CURRENT_TIMESTAMP
 );
@@ -24,37 +24,37 @@ insert into player(name) values ('Alice'), ('Bob');
 -- Œ‹‰Ê“ü‚ê‚é
 insert into result(player_id, pazzletime, movecount)
 VALUES 
-    ((select player_id from player where name='Alice'), '00:01:30.550', 85),
-    ((select player_id from player where name='Alice'), '00:02:10.230', 158),
-    ((select player_id from player where name='Alice'), '00:01:48.230', 78),
-    ((select player_id from player where name='Alice'), '00:01:55.440', 128),
-    ((select player_id from player where name='Alice'), '00:05:34.970', -1), -- ’ú‚ß‚½
-    ((select player_id from player where name='Alice'), '00:02:18.750', -1), 
-    ((select player_id from player where name='Alice'), '00:00:50.620', 64)
+    ((select player_id from player where name='Alice'), 9055, 85),
+    ((select player_id from player where name='Alice'), 13023, 158),
+    ((select player_id from player where name='Alice'), 10823, 78),
+    ((select player_id from player where name='Alice'), 11544, 128),
+    ((select player_id from player where name='Alice'), 33497, -1), -- ’ú‚ß‚½
+    ((select player_id from player where name='Alice'), 13875, -1), 
+    ((select player_id from player where name='Alice'), 5062, 64)
 ;
 insert into result(player_id, pazzletime, movecount)
 VALUES 
-    ((select player_id from player where name='Bob'), '00:01:50.350', 65),
-    ((select player_id from player where name='Bob'), '00:02:24.120', 132),
-    ((select player_id from player where name='Bob'), '00:01:28.230', 87),
-    ((select player_id from player where name='Bob'), '00:01:16.440', 141),
-    ((select player_id from player where name='Bob'), '00:03:34.720', -1), -- ’ú‚ß‚½
-    ((select player_id from player where name='Bob'), '00:00:54.480', 103)
+    ((select player_id from player where name='Bob'), 11035, 65),
+    ((select player_id from player where name='Bob'), 14412, 132),
+    ((select player_id from player where name='Bob'), 8823, 87),
+    ((select player_id from player where name='Bob'), 7644, 141),
+    ((select player_id from player where name='Bob'), 21472, -1), -- ’ú‚ß‚½
+    ((select player_id from player where name='Bob'), 5448, 103)
 ;
 
 insert into result(player_id, pazzletime, movecount)
 VALUES 
-    ((select player_id from player where name='Alice'), '00:01:00.000', 85),
-    ((select player_id from player where name='Alice'), '00:01:00.000', 85),
-    ((select player_id from player where name='Alice'), '00:02:00.000', 85);
+    ((select player_id from player where name='Alice'), 600, 85),
+    ((select player_id from player where name='Alice'), 600, 85),
+    ((select player_id from player where name='Alice'), 1200, 85);
 
 insert into result(player_id, pazzletime, movecount)
 VALUES 
-    ((select player_id from player where name='Alice'), '10:01:30.000', 85);
+    ((select player_id from player where name='Alice'), 360900, 85);
 
 insert into result(player_id, pazzletime, movecount)
 VALUES 
-    ((select player_id from player where name='Alice'), '00:40:00.000', 85);
+    ((select player_id from player where name='Alice'), 24000, 85);
 
 -- ‘S•”Œ©‚é
 select
