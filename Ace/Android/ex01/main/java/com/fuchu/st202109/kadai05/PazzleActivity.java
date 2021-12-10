@@ -5,17 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -65,21 +60,14 @@ public class PazzleActivity extends AppCompatActivity {
     private final Runnable task = new Runnable() {
         @Override
         public void run() {
-            if(pazzleGraphic != null) pazzleGraphic.postInvalidate();
+//            if(pazzleGraphic != null) pazzleGraphic.postInvalidate();
+//            if (pazzleGraphic != null) pazzleGraphic.reqDraw();
             if(pazzle.isActive() && !pazzle.isPazzleClear()) {
                 time10ms++;
                 updateTextHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         timeText.setText(time10ms_toString(time10ms));
-                    }
-                });
-            } else {
-                time10ms = -1;
-                updateTextHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        timeText.setText("00:00.00");
                     }
                 });
             }
@@ -91,7 +79,7 @@ public class PazzleActivity extends AppCompatActivity {
     private ScheduledExecutorService shuffleExec;
 
 
-    private boolean isShuffleNow = false;
+    private boolean flg_isShuffleNow = false;
     private Handler shuffleHandler = new Handler();
 
     private final class ShuffleTask implements Runnable {
@@ -103,7 +91,9 @@ public class PazzleActivity extends AppCompatActivity {
                 public void run() {
                     if (shuffleCnt < shuffleNum){
                         pazzle.shuffleBoard();
-                        if(shuffleCnt % 10 == 0)pazzleGraphic.postInvalidate();
+                        Log.i("ShuffleTask", (shuffleCnt)+"/"+shuffleNum);
+//                        if(shuffleCnt % 10 == 0)pazzleGraphic.postInvalidate();
+                        pazzleGraphic.reqDraw();
                         shuffleCnt++;
                     }else {
                         shuffleCnt = 0;
@@ -113,12 +103,17 @@ public class PazzleActivity extends AppCompatActivity {
             });
         }
     }
+    
+    public boolean isShuffleNow(){
+        return flg_isShuffleNow;
+    }
 
 
 
     public void startPazzle(){
-        isShuffleNow = false;
+
         shuffleExec.shutdown();
+        flg_isShuffleNow = false;
 
         new AlertDialog.Builder(act)
                 .setTitle("パズル開始")
@@ -141,6 +136,7 @@ public class PazzleActivity extends AppCompatActivity {
     private void pazzleCleared() {
         int pazzleTime = time10ms;
         int moved = moveCnt;
+        timeText.setText(time10ms_toString(pazzleTime));
         new AlertDialog.Builder(act)
                 .setTitle("パズル完成")
                 .setMessage(String.format(Locale.JAPAN,
@@ -182,14 +178,15 @@ public class PazzleActivity extends AppCompatActivity {
         moveCntText = findViewById(R.id.text_move_cnt);
 
         pazzleGraphic = findViewById(R.id.pazzle_graphic);
-        pazzleGraphic.invalidate();
+//        pazzleGraphic.invalidate();
+        pazzleGraphic.reqDraw();
 
         btn = findViewById(R.id.btn_retire);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!pazzle.isActive() && !isShuffleNow) {
-                    isShuffleNow = true;
+                if (!pazzle.isActive() && !flg_isShuffleNow) {
+                    flg_isShuffleNow = true;
                     Toast.makeText(act, getResources().getString(R.string.label_onshuffle), Toast.LENGTH_SHORT).show();
                     btn.setText(getResources().getString(R.string.label_onshuffle));
                     btn.setBackgroundColor(getResources().getColor(R.color.bluegray_500));
@@ -201,7 +198,7 @@ public class PazzleActivity extends AppCompatActivity {
                 }else if(pazzle.isActive()){
                     new AlertDialog.Builder(act)
                             .setTitle("確認")
-                            .setMessage("このパズルを諦めますか？")
+                            .setMessage("諦めますか？")
                             .setPositiveButton("はい", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -233,7 +230,8 @@ public class PazzleActivity extends AppCompatActivity {
         pazzle.inactivate();
         btn.setBackgroundColor(getResources().getColor(R.color.blue_500));
         btn.setText("スタート");
-        moveCntText.setText("000手");
+        timeText.setText(getResources().getString(R.string.time_zero));
+        moveCntText.setText(getResources().getString(R.string.move_zero));
         pazzle.boardInit();
     }
 
@@ -275,7 +273,8 @@ public class PazzleActivity extends AppCompatActivity {
                     touchSelectedPosition();
                     if (pazzle.canMove(pos)){
                         pazzle.moveBlank(pos);
-                        pazzleGraphic.invalidate();
+//                        pazzleGraphic.invalidate()
+                        pazzleGraphic.reqDraw();
                         moveCnt++;
                         moveCntText.setText(String.format(Locale.JAPAN,
                                 "%03d手", moveCnt));

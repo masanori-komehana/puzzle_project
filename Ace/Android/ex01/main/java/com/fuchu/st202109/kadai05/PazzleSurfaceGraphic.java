@@ -1,6 +1,7 @@
 package com.fuchu.st202109.kadai05;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -30,34 +32,57 @@ public class PazzleSurfaceGraphic extends SurfaceView implements SurfaceHolder.C
     private Bitmap[] pieceBitmaps = new Bitmap[16];
     private float pointX = 0f, pointY= 0f;
     private GridPosition selectedPositon = new GridPosition(-1, -1);
-    private RectF[][] pieceRects = new RectF[Pazzle.BOARD_SIZE][Pazzle.BOARD_SIZE];
+    private final RectF[][] pieceRects = new RectF[Pazzle.BOARD_SIZE][Pazzle.BOARD_SIZE];
     private final Pazzle pazzle = Pazzle.getInstance();
+    private PazzleActivity act = ((PazzleActivity)getContext());
 
-    private ScheduledExecutorService drawExec;
+    private Thread drawExec;
+
+    private DrawTask drawTask;
+    private boolean isReqDraw;
+
+    public void reqDraw(){
+        isReqDraw = true;
+    }
+
     private final class DrawTask implements Runnable {
         SurfaceHolder surfaceHolder;
-        Bitmap backBmp;
 
         public DrawTask(SurfaceHolder surfaceHolder){
             this.surfaceHolder = surfaceHolder;
         }
 
-        @Override
-        public void run() {
-
+        public void drawTask(){
+            Canvas canvas;
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-            Canvas canvas = surfaceHolder.lockCanvas();
+            canvas = surfaceHolder.lockCanvas();
             canvas.drawColor(Color.WHITE);
             paint.setColor(Color.BLACK);
             drawBoardPieces(canvas, paint);
-
-            if (backBmp != null) {
-                canvas.drawBitmap(backBmp, 0f, 0f, paint);
-            } else {
-                backBmp = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-            }
             surfaceHolder.unlockCanvasAndPost(canvas);
+        }
+
+
+        @Override
+        public void run() {
+            // 開幕盤面表示用
+
+            while(true) {
+                try {
+                    while(!pazzle.isActive() && !act.isShuffleNow()){
+                        if(isReqDraw){
+                            isReqDraw = false;
+                            drawTask();
+                        }
+                    }
+                    drawTask();
+                    Thread.sleep(1);
+                } catch (InterruptedException e){
+                    Log.i("DrawTask", "DrawThread Interrupted");
+                } catch (Exception e){
+                    Log.e("DrawTask", e.getLocalizedMessage());
+                }
+            }
         }
     }
 
@@ -69,24 +94,29 @@ public class PazzleSurfaceGraphic extends SurfaceView implements SurfaceHolder.C
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        drawExec = Executors.newSingleThreadScheduledExecutor();
-        drawExec.scheduleAtFixedRate(new DrawTask(surfaceHolder), 0, 10, TimeUnit.MILLISECONDS);
     }
 
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+        drawTask = new DrawTask(surfaceHolder);
+        drawExec = new Thread(drawTask);
+        drawExec.start();
+//        if(drawExec != null) drawExec.shutdown();
+//        drawExec = Executors.newSingleThreadScheduledExecutor();
+//        drawExec.scheduleAtFixedRate(new DrawTask(surfaceHolder), 0, 10, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-
+        drawExec.interrupt();
     }
 
     @SuppressLint("DrawAllocation")
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+
 
         gridSize = getWidth() / Pazzle.BOARD_SIZE;
         pieceSize = (float) getWidth() / Pazzle.BOARD_SIZE;
@@ -148,7 +178,7 @@ public class PazzleSurfaceGraphic extends SurfaceView implements SurfaceHolder.C
                     canvas.drawRect(pieceRects[i][j], paint);
                 }
                 if (p.isBlank())continue;
-                bmp = pieceBitmaps[pazzle.getBoardPiece(currentPosition).getNum()];
+                bmp = pieceBitmaps[p.getNum()];
                 drawPiece(j, i, frame, canvas, paint);
                 drawPiece(j, i, bmp, canvas, paint);
             }
