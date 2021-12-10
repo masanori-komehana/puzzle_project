@@ -20,6 +20,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Deque;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -47,6 +48,7 @@ public class PazzleSurfaceGraphic extends SurfaceView implements SurfaceHolder.C
 
     private final class DrawTask implements Runnable {
         SurfaceHolder surfaceHolder;
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         public DrawTask(SurfaceHolder surfaceHolder){
             this.surfaceHolder = surfaceHolder;
@@ -54,7 +56,6 @@ public class PazzleSurfaceGraphic extends SurfaceView implements SurfaceHolder.C
 
         public void drawTask(){
             Canvas canvas;
-            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             canvas = surfaceHolder.lockCanvas();
             canvas.drawColor(Color.WHITE);
             paint.setColor(Color.BLACK);
@@ -79,9 +80,10 @@ public class PazzleSurfaceGraphic extends SurfaceView implements SurfaceHolder.C
                     Thread.sleep(1);
                 } catch (InterruptedException e){
                     Log.i("DrawTask", "DrawThread Interrupted");
-                } catch (Exception e){
-                    Log.e("DrawTask", e.getLocalizedMessage());
                 }
+//                catch (Exception e){
+//                    Log.e("DrawTask", e.getLocalizedMessage());
+//                }
             }
         }
     }
@@ -157,29 +159,38 @@ public class PazzleSurfaceGraphic extends SurfaceView implements SurfaceHolder.C
     }
 
     public void drawBoardPieces(Canvas canvas, Paint paint) {
-        Bitmap frame = BitmapFactory.decodeResource(getResources(), R.drawable.button);
+        Bitmap frame = BitmapFactory.decodeResource(getResources(), R.drawable.pazzle_piece);
+        Bitmap frame2 = BitmapFactory.decodeResource(getResources(), R.drawable.pazzle_piece2);
+        Bitmap frame3 = BitmapFactory.decodeResource(getResources(), R.drawable.pazzle_piece3);
 
         GridPosition currentPosition = new GridPosition();
-        final int green500 = (getResources().getColor(R.color.green_500));
-        final int red500   = (getResources().getColor(R.color.red_500));
+//        final int green500 = (getResources().getColor(R.color.green_500));
+//        final int red500   = (getResources().getColor(R.color.red_500));
+
+        Deque<PazzlePiece> pazzlePieces = PazzlePiece.getDeque();
 
         for (int i = 0; i < Pazzle.BOARD_SIZE; i++) {
             currentPosition.setRow(i);
             for (int j = 0; j < Pazzle.BOARD_SIZE; j++) {
                 Bitmap bmp;
                 PazzlePiece p;
+                PazzlePiece correct = pazzlePieces.poll();
                 currentPosition.setCol(j);
                 p = pazzle.getBoardPiece(currentPosition);
-                if (pazzle.isActive() && pazzle.canMove(currentPosition)){
-                    paint.setColor(green500);
-                    canvas.drawRect(pieceRects[i][j], paint);
-                    paint.setColor(Color.BLACK);
-                } else {
-                    canvas.drawRect(pieceRects[i][j], paint);
+//                if (pazzle.isActive() && pazzle.canMove(currentPosition)){
+//                    paint.setColor(green500);
+//                    canvas.drawRect(pieceRects[i][j], paint);
+//                    paint.setColor(Color.BLACK);
+//                } else {
+//                }
+                canvas.drawRect(pieceRects[i][j], paint);
+                if (p.isBlank()) {
+                    continue;
                 }
-                if (p.isBlank())continue;
                 bmp = pieceBitmaps[p.getNum()];
-                drawPiece(j, i, frame, canvas, paint);
+                if(!pazzle.isPazzleClear() && pazzle.isActive() && pazzle.canMove(currentPosition)) drawPiece(j, i, frame3, canvas, paint);
+                else if(p == correct) drawPiece(j, i, frame2, canvas, paint);
+                else drawPiece(j, i, frame, canvas, paint);
                 drawPiece(j, i, bmp, canvas, paint);
             }
         }

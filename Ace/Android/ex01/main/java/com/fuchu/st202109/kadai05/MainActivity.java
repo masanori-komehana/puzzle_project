@@ -15,6 +15,10 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    // TODO プレイヤー見つからないときに登録させる処理。
+    // TODO ランキングアクティビティ
+    // TODO 統計アクティビティ
+    // TODO
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
                 act.startActivity(intent);
             }
         });
+
+
     }
 
 }

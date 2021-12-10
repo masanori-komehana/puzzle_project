@@ -91,7 +91,7 @@ public class PazzleActivity extends AppCompatActivity {
                 public void run() {
                     if (shuffleCnt < shuffleNum){
                         pazzle.shuffleBoard();
-                        Log.i("ShuffleTask", (shuffleCnt)+"/"+shuffleNum);
+//                        Log.i("ShuffleTask", (shuffleCnt)+"/"+shuffleNum);
 //                        if(shuffleCnt % 10 == 0)pazzleGraphic.postInvalidate();
                         pazzleGraphic.reqDraw();
                         shuffleCnt++;
@@ -124,6 +124,7 @@ public class PazzleActivity extends AppCompatActivity {
                         // TODO
                         pazzle.activate();
                         moveCnt = 0;
+                        time10ms = 0;
                         btn.setEnabled(true);
                         btn.setBackgroundColor(getResources().getColor(R.color.red_500));
                         btn.setText(getResources().getString(R.string.laben_btn_retire));
@@ -240,8 +241,7 @@ public class PazzleActivity extends AppCompatActivity {
         super.onResume();
         exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(task, 0, 10, TimeUnit.MILLISECONDS);
-
-
+        pazzleGraphic.reqDraw();
     }
 
     public void touchSelectedPosition(){
@@ -279,6 +279,7 @@ public class PazzleActivity extends AppCompatActivity {
                         moveCntText.setText(String.format(Locale.JAPAN,
                                 "%03d手", moveCnt));
                         if (pazzle.isPazzleClear()){
+                            pazzleGraphic.reqDraw();
                             pazzleCleared();
                         }
                     }
@@ -292,3 +293,4 @@ public class PazzleActivity extends AppCompatActivity {
     }
 
 }
+

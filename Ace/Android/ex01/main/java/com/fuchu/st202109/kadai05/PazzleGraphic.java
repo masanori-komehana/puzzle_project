@@ -74,7 +74,8 @@ public class PazzleGraphic extends View {
     }
 
     public void drawBoardPieces(Canvas canvas, Paint paint) {
-        Bitmap frame = BitmapFactory.decodeResource(getResources(), R.drawable.button);
+        Bitmap frame = BitmapFactory.decodeResource(getResources(), R.drawable.pazzle_piece);
+        Bitmap frame2 = BitmapFactory.decodeResource(getResources(), R.drawable.pazzle_piece2);
 
         GridPosition currentPosition = new GridPosition();
         final int green500 = (getResources().getColor(R.color.green_500));
@@ -96,7 +97,10 @@ public class PazzleGraphic extends View {
                 }
                 if (p.isBlank())continue;
                 bmp = pieceBitmaps[pazzle.getBoardPiece(currentPosition).getNum()];
-                drawPiece(j, i, frame, canvas, paint);
+                if(pazzle.isActive() && pazzle.canMove(currentPosition))
+                    drawPiece(j, i, frame2, canvas, paint);
+                else
+                    drawPiece(j, i, frame, canvas, paint);
                 drawPiece(j, i, bmp, canvas, paint);
             }
         }
