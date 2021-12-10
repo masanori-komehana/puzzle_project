@@ -4,8 +4,9 @@ create table result(
     id integer PRIMARY KEY AUTOINCREMENT, 
     player_id integer NOT NULL,
     pazzletime integer NOT NULL,
-    movecount text integer NOT NULL, 
-    playdatetime text DEFAULT CURRENT_TIMESTAMP
+    movecount integer NOT NULL, 
+    playdatetime text DEFAULT CURRENT_TIMESTAMP,
+    resigned integer DEFAULT 0
 );
 
 -- player table
@@ -106,51 +107,13 @@ select
     player.player_id,
     player.name,
     count(*) as 'play_count',
-    cast(
-	-- 24時間以上が出ないので割り算で無理やり出す
-        sum(strftime('%s',result.pazzletime)-strftime('%s','2000-01-01'))/3600 
-    as integer) as 'played_hour',
-    strftime(
-    '%M',
-        datetime(sum(strftime('%s',result.pazzletime)-strftime('%s','2000-01-01'))
-    ,'unixepoch')) as 'played_min',
-    strftime(
-    '%S',
-        datetime(sum(strftime('%s',result.pazzletime)-strftime('%s','2000-01-01'))
-    ,'unixepoch')) as 'played_sec',
-    (
-        select pazzletime from result
-	where 
-            player_id=player.player_id
-        order by
-            pazzletime asc
-        limit 1
-    ) as 'best_time',
-    (
-        select pazzletime from result
-	where 
-            player_id=player.player_id
-        order by
-            pazzletime desc
-        limit 1
-    ) as 'worst_time',
-    strftime(
-    '%M',
-        datetime(
-            avg(strftime('%s',result.pazzletime)-strftime('%s','2000-01-01'))
-        ,'unixepoch')
-    ) as 'average_min',
-    (
-        -- unixepochだと平均のミリ秒単位がでない 剰余が小数だと計算できないのでこんなことに・・・
-        avg(strftime('%s',result.pazzletime)-strftime('%s','2000-01-01') + strftime('%f',result.pazzletime) - cast(strftime('%f',result.pazzletime) as integer))
-	- (cast((avg(strftime('%s',result.pazzletime)-strftime('%s','2000-01-01') + strftime('%f',result.pazzletime) - cast(strftime('%f',result.pazzletime) as integer)))/60 as integer) * 60)
-    ) as 'average_sec',
-    (
-        -- 諦めたときは-1が入ってしまうのでそれを除外したい
+    (sum(result.pazzletime)) as 'played_time',
+    (min(result.pazzletime)) as 'best_time',
+    (max(result.pazzletime)) as 'worst_time',
+    (avg(result.pazzletime)) as 'average_time',
+    (-- 諦めたときは-1が入ってしまうのでそれを除外したい
         select min(movecount) from result
-	where 
-            player_id=player.player_id
-            and movecount!=-1
+	where player_id=player.player_id and movecount!=-1
     ) as 'best_movecount',
     max(result.movecount) as 'worst_movecount',
     avg(result.movecount) as 'avg_movecount'
@@ -165,11 +128,6 @@ group by
 ;
 
 
-select 
-  strftime('%s',pazzletime)-strftime('%s','2000-01-01') + strftime('%f',pazzletime) - cast(strftime('%f',pazzletime) as integer)
-from 
-  result;
- 
 
 select
   strftime('%f', 80);
