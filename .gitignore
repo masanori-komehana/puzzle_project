@@ -7,3 +7,4 @@ test
 ~$*
 *.pyc
 RasPi_py_projects/ex22_sqlite/pazzle15.db
+RasPi_py_projects/ex22_sqlite/records.csv
