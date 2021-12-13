@@ -5,3 +5,4 @@ TS_Projects
 *.out
 test
 ~$*
+*.pyc
