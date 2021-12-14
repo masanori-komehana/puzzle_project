@@ -35,12 +35,14 @@ for i in range(255):
 # Application definition
 
 INSTALLED_APPS = [
+    'all_result.apps.AllResultConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'aldjemy',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +82,7 @@ WSGI_APPLICATION = 'pazzle15.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'pazzle15.db',
     }
 }
 
