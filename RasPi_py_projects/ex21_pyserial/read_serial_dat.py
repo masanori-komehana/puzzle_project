@@ -49,6 +49,7 @@ class SerCom:
             else:
                 movecnt  = int(lst[0])
                 ms10 = int(lst[1])
+                resigned = int(lst[2])
                 print('pazzle record')
                 print(f"move count: {movecnt}")
                 print(f"time: {ms10 // 6000}:{(ms10//100) % 60}.{ms10%100}")
