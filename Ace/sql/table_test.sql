@@ -1,4 +1,4 @@
--- result table
+ï»¿-- result table
 drop table if EXISTS result;
 create table result(
     id integer PRIMARY KEY AUTOINCREMENT, 
@@ -18,18 +18,18 @@ create table player(
     current integer DEFAULT 0
 );
 
--- ƒvƒŒƒCƒ„[“o˜^
+-- ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç™»éŒ²
 insert into player(name) values ('Alice'), ('Bob');
 
 
--- Œ‹‰Ê“ü‚ê‚é
+-- çµæœå…¥ã‚Œã‚‹
 insert into result(player_id, pazzletime, movecount)
 VALUES 
     ((select player_id from player where name='Alice'), 9055, 85),
     ((select player_id from player where name='Alice'), 13023, 158),
     ((select player_id from player where name='Alice'), 10823, 78),
     ((select player_id from player where name='Alice'), 11544, 128),
-    ((select player_id from player where name='Alice'), 33497, -1), -- ’ú‚ß‚½
+    ((select player_id from player where name='Alice'), 33497, -1), -- è«¦ã‚ãŸ
     ((select player_id from player where name='Alice'), 13875, -1), 
     ((select player_id from player where name='Alice'), 5062, 64)
 ;
@@ -39,7 +39,7 @@ VALUES
     ((select player_id from player where name='Bob'), 14412, 132),
     ((select player_id from player where name='Bob'), 8823, 87),
     ((select player_id from player where name='Bob'), 7644, 141),
-    ((select player_id from player where name='Bob'), 21472, -1), -- ’ú‚ß‚½
+    ((select player_id from player where name='Bob'), 21472, -1), -- è«¦ã‚ãŸ
     ((select player_id from player where name='Bob'), 5448, 103)
 ;
 
@@ -57,7 +57,7 @@ insert into result(player_id, pazzletime, movecount)
 VALUES 
     ((select player_id from player where name='Alice'), 24000, 85);
 
--- ‘S•”Œ©‚é
+-- å…¨éƒ¨è¦‹ã‚‹
 select
     result.id,
     player.name,
@@ -70,7 +70,7 @@ on
     result.player_id=player.player_id
 ;
 
---- ŠÔ‡
+--- æ™‚é–“é †
 select
     result.id,
     player.name,
@@ -85,7 +85,7 @@ order by
     result.pazzletime asc
 ;
 
---- è”‡
+--- æ‰‹æ•°é †
 select
     result.id,
     player.name,
@@ -102,7 +102,7 @@ order by
     result.movecount asc
 ;
 
--- ƒvƒŒƒCƒ„[•Ê “Œv ‘ƒvƒŒƒC‰ñ” ‘ƒvƒŒƒCŠÔ ƒxƒXƒgƒ^ƒCƒ€ ƒ[ƒXƒgƒ^ƒCƒ€ •½‹Ïƒ^ƒCƒ€ è”Å¬Å‘½•½‹Ï
+-- ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åˆ¥ çµ±è¨ˆ ç·ãƒ—ãƒ¬ã‚¤å›æ•° ç·ãƒ—ãƒ¬ã‚¤æ™‚é–“ ãƒ™ã‚¹ãƒˆã‚¿ã‚¤ãƒ  ãƒ¯ãƒ¼ã‚¹ãƒˆã‚¿ã‚¤ãƒ  å¹³å‡ã‚¿ã‚¤ãƒ  æ‰‹æ•°æœ€å°æœ€å¤šå¹³å‡
 select
     player.player_id,
     player.name,
@@ -111,7 +111,7 @@ select
     (min(result.pazzletime)) as 'best_time',
     (max(result.pazzletime)) as 'worst_time',
     (avg(result.pazzletime)) as 'average_time',
-    (-- ’ú‚ß‚½‚Æ‚«‚Í-1‚ª“ü‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å‚»‚ê‚ğœŠO‚µ‚½‚¢
+    (-- è«¦ã‚ãŸã¨ãã¯-1ãŒå…¥ã£ã¦ã—ã¾ã†ã®ã§ãã‚Œã‚’é™¤å¤–ã—ãŸã„
         select min(movecount) from result
 	where player_id=player.player_id and movecount!=-1
     ) as 'best_movecount',
