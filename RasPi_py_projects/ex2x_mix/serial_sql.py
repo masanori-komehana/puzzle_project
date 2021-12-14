@@ -11,6 +11,8 @@ from pprint import pprint
 
 import serial
 
+from Pazzle15DBHelper import *
+
 class SerCom:
     def __init__(self, tty, baud='115200'):
         self.ser = serial.Serial(tty, baud, timeout=0.1)
@@ -50,14 +52,24 @@ class SerCom:
             else:
                 movecnt  = int(lst[0])
                 ms10 = int(lst[1])
+                resigned = int(lst[2])
+                p = get_current_player()
+                ret = Result(
+                    player_id=p.player_id,
+                    pazzletime=ms10,
+                    movecount=movecnt,
+                    resigned=resigned
+                )
+                db.add(ret)
+                db.commit()
                 print('pazzle record')
                 print(f"move count: {movecnt}")
                 print(f"time: {ms10_to_time(ms10)}")
                 with open('records.csv', 'a') as f:
-                    record = ['Guest', lst[0], lst[1]]
+                    record = [p.name, lst[0], lst[1], lst[2]]
                     w = csv.writer(f, lineterminator='\n')
                     w.writerow(record)
-
+                
             self.queue.task_done()
 
     def recv_(self):

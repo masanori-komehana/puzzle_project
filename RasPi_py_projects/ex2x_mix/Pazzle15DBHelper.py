@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
 import datetime
 from contextlib import closing
 import sqlite3
@@ -56,8 +57,9 @@ class Player(Base):
     created_dt = Column(DateTime(timezone=True), default=func.now())
     current = Column(Integer, server_default="0")
     def __repr__(self):
-        return '<Player id={id} name={name!r}>'.format(
-                id=self.player_id, name=self.name)
+        return '<Player id={id} name={name!r}{current}>'.format(
+                id=self.player_id, name=self.name, 
+                current=(' * ' if self.current==1 else '' ))
 
 
 
@@ -101,9 +103,15 @@ def add_result(name, moves, pzt):
     else:
         return False, "Multiple same names."
 
+def get_current_player():
+    _q = db.query(Player)\
+            .filter(Player.current == 1)\
+            .first()
+    return _q
 
 def set_current_player_by_id(player_id):
     db.execute("update player set current=0;")
+    db.commit()
     p = get_player_by_id(player_id)
     p.current = 1
     db.commit()
@@ -120,7 +128,7 @@ def get_player_by_id_list(id_list):
 def get_player_by_id(player_id):
     _q = db.query(Player)\
             .filter(Player.player_id == player_id)\
-            .all()
+            .first()
     return _q;
 
 
