@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/usr/bin/env python3
 
 from random import choice
 
@@ -13,7 +13,7 @@ try:
         v = choice('wasd')
         print(v)
         ser.write(str.encode(v))
-        time.sleep(1*(32*3)/3200)
+        time.sleep(1*(32*3)/1600)
 finally:
     ser.close()
 
