@@ -76,6 +76,7 @@ class SerCom:
         self.event.set()
         self.thread_r.join()
         self.ser.close()
+        db.close()
 
 def ms10_to_time(ms10):
     return f"{ms10 // 6000}:{(ms10//100) % 60}.{ms10%100}"

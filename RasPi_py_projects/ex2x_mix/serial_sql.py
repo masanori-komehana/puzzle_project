@@ -53,20 +53,26 @@ class SerCom:
                 movecnt  = int(lst[0])
                 ms10 = int(lst[1])
                 resigned = int(lst[2])
-                p = get_current_player()
-                ret = Result(
-                    player_id=p.player_id,
-                    pazzletime=ms10,
-                    movecount=movecnt,
-                    resigned=resigned
-                )
-                db.add(ret)
-                db.commit()
+                name = "Guest"
+                try:
+                    with create_session() as db:
+                        p = get_current_player(db)
+                        name = p.name
+                        ret = Result(
+                            player_id=p.player_id,
+                            pazzletime=ms10,
+                            movecount=movecnt,
+                            resigned=resigned
+                        )
+                        db = scoped_session(SessionMaker)    
+                        db.add(ret)
+                except Exeption as e:
+                    print(e)
                 print('pazzle record')
                 print(f"move count: {movecnt}")
                 print(f"time: {ms10_to_time(ms10)}")
                 with open('records.csv', 'a') as f:
-                    record = [p.name, lst[0], lst[1], lst[2]]
+                    record = [name, lst[0], lst[1], lst[2]]
                     w = csv.writer(f, lineterminator='\n')
                     w.writerow(record)
                 

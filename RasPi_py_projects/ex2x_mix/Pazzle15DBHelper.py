@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-
 import datetime
-from contextlib import closing
+from contextlib import closing, contextmanager
 import sqlite3
 
 import sqlalchemy
@@ -28,7 +27,8 @@ dbname = 'pazzle15.db'
 #    connection.commit()
 
 Base = declarative_base()
-engine = sqlalchemy.create_engine(f"sqlite:///{dbname}", echo=True)
+sql_connection, echo = (f"sqlite:///{dbname}", True)
+engine = sqlalchemy.create_engine(sql_connection, echo=echo)
 
 
 class Result(Base):
@@ -65,22 +65,29 @@ class Player(Base):
 
 Base.metadata.create_all(bind=engine)
 SessionMaker = sessionmaker(bind=engine)
-db = scoped_session(SessionMaker)    
 
-def utc_to_jst(timestamp_utc):
-    datetime_utc = datetime.datetime.strptime(str(timestamp_utc) + "+0000", "%Y-%m-%d %H:%M:%S%z")
-    datetime_jst = datetime_utc.astimezone(datetime.timezone(datetime.timedelta(hours=+9)))
-    timestamp_jst = datetime.datetime.strftime(datetime_jst, '%Y-%m-%d %H:%M:%S')
-    return timestamp_jst
+@contextmanager
+def create_session():
+    db = scoped_session(SessionMaker)
+    try:
+        yield db
+        db.commit()
+    except:
+        db.rollback()
+        raise
+    finally:
+        db.close()
 
-def insert_player(name):
+
+
+def insert_player(db, name):
     p = Player()
     p.name = name
 
     db.add(instance=p)
     db.commit()
 
-def __insert_result(player_id, moves, pzt):
+def __insert_result(db, player_id, moves, pzt):
     _r = Result()
     _r.player_id = player_id
     _r.moves = moves
@@ -89,7 +96,7 @@ def __insert_result(player_id, moves, pzt):
     db.commit()
 
 
-def add_result(name, moves, pzt):
+def add_result(db, name, moves, pzt):
     _q = db.query(Player.player_id)\
             .filter(Player.name == name)\
             .all()
@@ -103,29 +110,30 @@ def add_result(name, moves, pzt):
     else:
         return False, "Multiple same names."
 
-def get_current_player():
+def get_current_player(db):
     _q = db.query(Player)\
             .filter(Player.current == 1)\
             .first()
     return _q
 
 def set_current_player_by_id(player_id):
-    db.execute("update player set current=0;")
-    db.commit()
-    p = get_player_by_id(player_id)
-    p.current = 1
-    db.commit()
+    with create_session() as db:
+        db.execute("update player set current=0;")
+        db.commit()
+        p = get_player_by_id(db, player_id)
+        p.current = 1
+    
 
 
 
-def get_player_by_id_list(id_list):
+def get_player_by_id_list(db, id_list):
     _q = db.query(Player)\
             .filter(Player.player_id.in_(player_id))\
             .all()
     return _q;
 
 
-def get_player_by_id(player_id):
+def get_player_by_id(db, player_id):
     _q = db.query(Player)\
             .filter(Player.player_id == player_id)\
             .first()
@@ -133,19 +141,20 @@ def get_player_by_id(player_id):
 
 
 
-def get_current_player_id():
+def get_current_player_id(db):
     _q = db.query(Player.player_id)\
             .filter(Player.current == 1)\
-            .all()
-    return _q
+            .first()
+    return _q.player_id
 
-def all_result():
+def all_result(db):
+ 
     _q = db.query(Result, Player)\
             .join(Player, Result.player_id==Player.player_id)\
             .all() 
     return _q
 
-def show_statistics():
+def show_statistics(db):
     query = """select
     player.player_id,
     player.name,
@@ -168,5 +177,8 @@ on
 group by
     player.name
 ;"""
+ 
     _q = db.execute(query).all()
     return _q
+
+
