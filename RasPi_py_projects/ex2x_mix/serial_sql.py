@@ -80,11 +80,11 @@ class SerCom:
 
     def recv_(self):
         while not self.event.is_set():
-             line = self.ser.readline()
-             if len(line) > 0:
-                 #print(line)
-                 #print((line).decode('utf-8').split(','))
-                 self.queue.put(line)
+            line = self.ser.readline()
+            if len(line) > 0:
+                #print(line)
+                #print((line).decode('utf-8').split(','))
+                self.queue.put(line)
 
     def send(self, data):
         # print('write', data)
