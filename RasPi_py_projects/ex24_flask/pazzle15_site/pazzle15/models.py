@@ -21,6 +21,12 @@ class Result(db.Model):
         datetime_jst = datetime_utc.astimezone(datetime.timezone(datetime.timedelta(hours=+9)))
         timestamp_jst = datetime.datetime.strftime(datetime_jst, '%Y-%m-%d %H:%M:%S')
         return timestamp_jst
+    def get_keys(self):
+        self.keys = ["名前", "手数", "タイム"]
+        self.dict = {"名前": self.player.name, "手数":self.movecount, "タイム":self.get_pzt_str()}
+        for k in self.keys:
+            yield k
+
 
 class Player(db.Model):
     __tablename__ = "player"
@@ -32,10 +38,13 @@ class Player(db.Model):
         return '<Player id={id} name={name!r}>'.format(
                 id=self.player_id, name=self.name)
     def get_created_dt_jst(self):
-        datetime_utc = datetime.datetime.strptime(str(self.playdatetime) + "+0000", "%Y-%m-%d %H:%M:%S%z")
+        datetime_utc = datetime.datetime.strptime(str(self.created_dt) + "+0000", "%Y-%m-%d %H:%M:%S%z")
         datetime_jst = datetime_utc.astimezone(datetime.timezone(datetime.timedelta(hours=+9)))
         timestamp_jst = datetime.datetime.strftime(datetime_jst, '%Y-%m-%d %H:%M:%S')
         return timestamp_jst
+    def is_current(self):
+        return self.current==1
+
 def init():
     db.create_all()
 

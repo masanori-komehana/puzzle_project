@@ -31,8 +31,8 @@
                             <td>{{r.id}}</td>
                             <td>{{r.player.name}}</td>
                             <td>{{r.movecount}}</td>
-                            <td>{{r.pazzletime}}</td>
-                            <td>{{r.playdatetime}}</td>
+                            <td>{{r.get_pzt_str()}}</td>
+                            <td>{{r.get_playdatetime_jst()}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -18,6 +18,20 @@ def results():
     results = Result.query.all()
     return render_template('index3.html', results=results)
 
+@app.route('/results2')
+def results2():
+    s = ""
+    results = Result.query.all()
+    return render_template('results.html', results=results)
+
+@app.route('/players',)
+def players():
+    players = Player.query.all()
+    return render_template('players.html', players=players)
+@app.route('/players', methods=['POST'])
+def select_player():
+    s = f"you selected number {request.form['select_id']}"
+    return s
 
 @app.route('/add', methods=['POST'])
 def add_entry():
