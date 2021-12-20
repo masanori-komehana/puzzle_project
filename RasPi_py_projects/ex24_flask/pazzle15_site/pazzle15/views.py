@@ -24,14 +24,24 @@ def results2():
     results = Result.query.all()
     return render_template('results.html', results=results)
 
-@app.route('/players',)
+@app.route('/players', methods=['GET'])
 def players():
     players = Player.query.all()
     return render_template('players.html', players=players)
 @app.route('/players', methods=['POST'])
 def select_player():
-    s = f"you selected number {request.form['select_id']}"
-    return s
+    select_id = int(request.form['select_id'])
+    player1 = Player.query.filter(Player.current==1).first()
+    player1.current = 0
+    current_id = player1.player_id
+    player2 = Player.query.filter(Player.player_id == select_id).first()
+    player2.current = 1
+    db.session.add(player1)
+    db.session.add(player2)
+    db.session.commit()
+    print(f"player change: {current_id} -> {select_id}")
+    flash(f'Player Selected: {player2.name}')
+    return redirect(url_for('players'))
 
 @app.route('/add', methods=['POST'])
 def add_entry():

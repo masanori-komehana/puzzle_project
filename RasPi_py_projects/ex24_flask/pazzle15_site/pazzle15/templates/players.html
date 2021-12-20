@@ -49,7 +49,7 @@
           Statistics
         </a>
       </li>
-     </ul>
+      </ul>
     <hr>
     <span class="fs-5">document</span>
   </div>
@@ -58,15 +58,21 @@
 
 
   <div class="col">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-primary" role="alert">
+      {{ message }}
+    </div>
+
+    {% endfor %}
     <h1>Players</h1>
     <div class="list-group">
       {% for p in players %}
       <div class="list-group-item">
         <div class="d-flex align-items-center justify-content-between">
         <strong class="mb-1">
-            番号：{{p.id}}
+            番号：{{p.player_id}}
         </strong>
-        <small>{{ p.get_created_dt_jst() }}</small>
+        <small>追加：{{ p.get_created_dt_jst() }}</small>
         </div>
         <p>名前：{{p.name}}</p>
         <p>
