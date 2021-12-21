@@ -1,25 +1,25 @@
 <div class="col-3">
-    <div class="" style="position: sticky; top: 0px;">
-        <div class="d-flex flex-column flex-shrink-0 bg-light">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-                <span class="fs-4">Pazzle15</span>
+  <div class="" style="position: sticky; top: 0px;">
+    <div class="d-flex flex-column flex-shrink-0 bg-light">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+        <span class="fs-4">Pazzle15</span>
+      </a>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
+        {% for k in page_dict.keys() %}
+        <li class="nav-item">
+          {% if request.url_rule.endpoint == k %}
+          <a class="nav-link active">
+            {% else %}
+            <a href="{{ url_for(k) }}" class="nav-link link-dark">
+              {% endif %}
+              {{ page_dict[k] }}
             </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                {% for k in page_dict.keys() %}
-                <li class="nav-item">
-                    {% if request.url_rule.endpoint == k %}
-                    <a class="nav-link active">
-                    {% else %}
-                    <a href="{{ url_for(k) }}" class="nav-link link-dark">
-                    {% endif %}
-                        {{ page_dict[k] }}
-                    </a>
-                </li>
-                {% endfor %}
-            </ul>
-            <hr>
-            <span class="fs-5">document</span>
-        </div>
+        </li>
+        {% endfor %}
+      </ul>
+      <hr>
+      <span class="fs-5">document</span>
     </div>
+  </div>
 </div>
