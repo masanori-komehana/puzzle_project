@@ -30,12 +30,12 @@
         </a>
       </li>
       <li class="nav-item">
-        <a href="#" class="nav-link active">
-          paged_results
+        <a href="#" class="nav-link link-dark">
+          Players
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link link-dark">
+        <a href="#" class="nav-link active">
           All Results
         </a>
       </li>
@@ -58,9 +58,9 @@
 
 
   <div class="col">
-    <h1>Results Page:{{page}}</h1>
+    <h1>All Results</h1>
     <div class="list-group">
-      {% for r in paged_results.items %}
+      {% for r in results %}
       <div class="list-group-item">
         <div class="d-flex align-items-center justify-content-between">
         <strong class="mb-1">
@@ -74,36 +74,7 @@
       </div>
       {% endfor %}
     </div>
-    <ul class="pagination justify-content-center">
-      {% if paged_results.has_prev %}
-      <li class="page-item">
-        <a class="page-link" href="{{ url_for('paged_results', page=paged_results.prev_num) }}">Previous</a>
-      </li>
-      {% else %}
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-      </li>
-      {% endif %}
-      {% for i in range(1, (paged_results.total // per_page) + 2) %}
-      {% if i == page %}
-      <li class="page-item active" aria-current="page">
-        <a class="page-link">{{i}}</a>
-      </li>
-      {% else %}
-      <li class="page-item"><a class="page-link" href="{{ url_for('paged_results', page=i) }}">{{i}}</a></li>
-      {% endif %}
-      {% endfor %}
-
-      {% if paged_results.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="{{ url_for('paged_results', page=paged_results.next_num) }}">Next</a>
-      </li>
-      {% else %}
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
-      </li>
-      {% endif%}
-    </ul>
+    
   </div>
 
 </div>
