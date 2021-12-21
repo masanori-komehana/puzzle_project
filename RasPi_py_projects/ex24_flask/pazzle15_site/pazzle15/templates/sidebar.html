@@ -1,6 +1,6 @@
 <div class="col-3">
   <div class="" style="position: sticky; top: 0px;">
-    <div class="d-flex flex-column flex-shrink-0 bg-light">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <span class="fs-4">Pazzle15</span>
       </a>
@@ -11,7 +11,7 @@
           {% if request.url_rule.endpoint == k %}
           <a class="nav-link active">
             {% else %}
-            <a href="{{ url_for(k) }}" class="nav-link link-dark">
+            <a href="/{{k}}" class="nav-link link-dark">
               {% endif %}
               {{ page_dict[k] }}
             </a>

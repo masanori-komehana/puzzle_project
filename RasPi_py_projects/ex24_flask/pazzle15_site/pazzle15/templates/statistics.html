@@ -1,0 +1,16 @@
+{% extends "page_layout.html" %}
+{% block title %}
+Pazzle15 Statistics
+{% endblock %}
+{% block content %}
+<h1>Statistics</h1>
+<div class="list-group">
+    {% for s in statistics %}
+    <div class="list-group-item">
+        {% for k, col_name in col_dict.items() %}
+        <p>{{col_name}}：{{s[k]}}</p>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
