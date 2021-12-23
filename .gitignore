@@ -1,4 +1,5 @@
 .DS_Store
+Pazzle15_site/env
 document/build
 TS_Projects
 *.o
@@ -8,3 +9,4 @@ test
 *.pyc
 RasPi_py_projects/ex22_sqlite/pazzle15.db
 RasPi_py_projects/ex22_sqlite/records.csv
+*.log
