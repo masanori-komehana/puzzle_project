@@ -1,17 +1,29 @@
 {% extends "layout.html" %}
 {% block body %}
-<form action="{{ url_for('add_entry') }}" method=post class=add-entry>
-  <dl>
-    <dt>名前:
-    <dd><input type=text size=20 name="name">
-    <dd><input type=submit value="追加">
-  </dl>
+
+<hr />
+<p class="fs-2">Register Player</p>
+<form action="{{ url_for('add_entry') }}" method=post class="add-entry pb-4">
+  <div class="row d-flex align-items-center justify-content-between">
+    <div class="col text-end">
+      名前:
+    </div>
+    <div class="col">
+      <input type=text size="40" name="name">
+    </div>
+    <div class="col">
+      <input type=submit value="追加">
+    </div>
+
+  </div>
 </form>
 
-<ul class=entries>
+
+<p class="fs-5 pt-4">players:</p>
+<ul class=" entries">
   {% for entry in entries %}
-  <li>
-    <h2>{{ entry.name }}</h2>{{ entry.created_dt }}
+  <li class="ms-5">
+    <h2>{{ entry.name }}</h2>追加日：{{ entry.created_dt }}
     {% else %}
   <li><em>Unbelievable. No entries here so far</em>
     {% endfor %}

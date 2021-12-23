@@ -1,24 +1,17 @@
 {% extends "page_layout.html" %}
-{% block title %}Pazzle15 Results{% endblock %}
+{% block title %}
+Pazzle15 Results
+{% endblock %}
 {% block content %}
 <h1>Results Page:{{page}}</h1>
 <div class="pagination">
   {{ pagination.links }}
 </div>
 <div class="list-group">
-  {% for r in paged_results %}
-  <div class="list-group-item">
-    <div class="d-flex align-items-center justify-content-between">
-      <strong class="mb-1">
-        番号：{{r.id}}
-      </strong>
-      <small>Played at:{{ r.get_playdatetime_jst() }}</small>
-    </div>
-    {% for k in r.get_keys() %}
-    <p>{{k}}：{{r.dict[k]}}</p>
-    {% endfor %}
-  </div>
-  {% endfor %}
+  {%- for r in paged_results %}
+  {%- set i = r.id %}
+  {%- include "result_list_item.html" %}
+  {%- endfor %}
 </div>
 <div class="pagination justify-content-center">
   {{ pagination.links }}
@@ -53,6 +46,6 @@
     <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
   </li>
   {% endif %}
+  </ul>
 #}
-</ul>
 {% endblock %}

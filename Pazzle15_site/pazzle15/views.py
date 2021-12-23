@@ -9,11 +9,21 @@ from pazzle15 import app, db
 from pazzle15.models import Player, Result
 
 
-page_dict = {"players":"Players", "results":"Results", "rankings":"Rankings", "statistics":"Statistics"}
+page_dict = {"results": "Results", "players": "Players",
+            "rankings": "Rankings", "statistics": "Statistics"}
+
+context = {
+    "page_dict":page_dict
+    }
+
+
+rank_type = ["Latest", "Moves", "Time"]
 
 def get_played_time_str(t):
     pzt = int(t)
-    return f'{pzt//6000}:{(pzt//100)%60:02}.{pzt%60:02}'
+    hours = f'{(pzt//360000)}:' if (pzt//6000) > 60 else ""
+    return f'{hours}{(pzt//6000)%60}:{(pzt//100)%60:02}.{pzt%60:02}'
+
 def get_pzt_str(t):
     pzt = int(t)
     return f'{pzt//6000}:{(pzt//100)%60:02}.{pzt%60:02}'
@@ -21,17 +31,30 @@ def get_pzt_str(t):
 @app.route('/')
 def show_entries():
     entries = Player.query.order_by(Player.player_id.desc()).all()
-    return render_template('show_entries.html', page_dict=page_dict, entries=entries)
+    context_local = dict(
+        entries=entries,
+        **context
+    )
+    return render_template('show_entries.html', **context_local)
 
 @app.route('/index2')
 def index2():
     entries = Player.query.order_by(Player.player_id.asc()).all()
-    return render_template('index2.html', page_dict=page_dict, player=entries)
+    context_local = dict(
+        player=entries,
+        **context
+    )
+    return render_template('index2.html', **context_local)
 
 @app.route('/players', methods=['GET'])
 def players():
     players = Player.query.all()
-    return render_template('players.html', page_dict=page_dict, players=players)
+
+    context_local = dict(
+        players=players,
+        **context
+    )
+    return render_template('players.html', **context_local)
     
 @app.route('/players', methods=['POST'])
 def select_player():
@@ -46,7 +69,9 @@ def select_player():
     db.session.commit()
     print(f"player change: {current_id} -> {select_id}")
     flash(f'Player Selected: {player2.name}')
-    return redirect(url_for('players', page_dict=page_dict))
+
+
+    return redirect(url_for('players'))
 
 @app.route('/statistics')
 def statistics():
@@ -86,15 +111,56 @@ def statistics():
         ";")
     statistics = [dict(row) for row in result]
     for row_dict in statistics:
+        row_dict['played_time'] = get_played_time_str(row_dict['played_time'])
         row_dict['best_time'] = get_pzt_str(row_dict['best_time'])
         row_dict['worst_time'] = get_pzt_str(row_dict['worst_time'])
         row_dict['avg_time'] = get_pzt_str(row_dict['avg_time'])
-    return render_template('statistics.html',statistics=statistics, page_dict=page_dict, col_dict=col_dict)
+        row_dict['avg_movecount'] = '%.2f' % (row_dict['avg_movecount'],)
+
+    context_local = dict(
+        **context,
+        statistics=statistics, col_dict=col_dict
+    )
+    return render_template('statistics.html', **context_local)
 
 @app.route('/rankings')
 def rankings():
-    s = "This is Rankings Page. Coming Soon..."
-    return render_template('rankings.html', page_dict=page_dict, s=s)
+    return redirect('/rankings/Latest')
+
+@app.route('/rankings/<current_type>')
+def rankings_typed(current_type):
+    # current_type = "Latest"
+    # s = "This is Rankings Page. Coming Soon..."
+    s = ""
+    num_title = "順位"
+    if current_type == "Latest":
+        num_title = "番号"
+        result = Result\
+            .query.order_by(Result.id.desc())\
+            .limit(100)\
+            .all()
+    elif current_type == "Moves":
+        result = Result\
+            .query.order_by(Result.movecount.asc())\
+            .limit(100)\
+            .all()
+    elif current_type == "Time":
+        result = Result\
+            .query.order_by(Result.pazzletime.asc())\
+            .limit(100)\
+            .all()
+    else:
+        s = "Unknown Ranking Type..."
+        result = []
+    context_local = dict(
+        **context,
+        rank_type=rank_type,
+        num_title=num_title,
+        result=result,
+        current_type=current_type, s=s
+    )
+    return render_template('rankings.html', **context_local)
+
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
@@ -104,7 +170,15 @@ def results():
         page = request.args.get(get_page_parameter(), type=int, default=1)
         res = result[(page-1)*per_page: page*per_page]
         pagination = Pagination(page=page, total=len(result),  per_page=per_page, css_framework='bootstrap5')
-    return render_template('results.html',pagination = pagination, page_dict=page_dict, paged_results=res, page=page)
+    context_local = dict(
+        **context,
+        num_title="番号",
+        pagination=pagination, paged_results=res, page=page
+    )
+    return render_template('results.html', **context_local)
+
+
+
 
 @app.route('/add', methods=['POST'])
 def add_entry():

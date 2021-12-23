@@ -1,28 +1,40 @@
-<nav class="navbar navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Pazzle15</a>
-        <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Pazzle15</a>
+    <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+        aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="navbarToggleExternalContent">
+        <div class="navbar-nav">
+            {%- for k in page_dict.keys() %}
+            {%- if request.url_rule.endpoint == k %}
+            <a class="nav-item nav-link active">
+            {%- else %}
+            <a href="/{{k}}" class="nav-item nav-link link-dark">
+            {%- endif %}
+                {{ page_dict[k] }}
+            </a>
+            {%- endfor %}
+        </div>
     </div>
 </nav>
-
-<div class="collapse" id="navbarToggleExternalContent">
+{#
+<!-- <div class="collapse" id="navbarToggleExternalContent">
     <div class="bg-light p-4">
         <ul class="nav nav-pills flex-column mb-auto">
             {% for k in page_dict.keys() %}
             <li class="nav-item">
                 {% if request.url_rule.endpoint == k %}
                 <a class="nav-link active">
-                    {% else %}
-                    <a href="/{{k}}" class="nav-link link-dark">
-                        {% endif %}
-                        {{ page_dict[k] }}
-                    </a>
+                {% else %}
+                <a href="/{{k}}" class="nav-link link-dark">
+                    {% endif %}
+                    {{ page_dict[k] }}
+                </a>
             </li>
             {% endfor %}
         </ul>
     </div>
-</div>
+</div> -->
+#}

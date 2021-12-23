@@ -1,0 +1,11 @@
+<div class="list-group-item">
+    <div class="d-flex align-items-center justify-content-between">
+        <strong class="mb-1">
+            {{num_title}}：{{i}}
+        </strong>
+        <small>Played at:{{ r.get_playdatetime_jst() }}</small>
+    </div>
+    {%- for k in r.get_keys() %}
+    <p>{{k}}：{{r.dict[k]}}</p>
+    {%- endfor %}
+</div>

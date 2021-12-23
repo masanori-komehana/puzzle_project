@@ -1,8 +1,66 @@
 {% extends "page_layout.html" %}
 {% block title %}
-Pazzle15 Rankings
+        Pazzle15 Rankings
 {% endblock %}
 {% block content %}
-<h1>Rankings</h1>
+<h1>Rankings:{{current_type}}</h1>
 {{s}}
+<div class="container">
+    <div class="list-group">
+        {%- for r in result %}
+        {%- if current_type == 'Latest' %}
+        {%- set i = r.id %}
+        {%- else %}
+        {%- set i = loop.index0+1 %}
+        {%- endif %}
+        {%- include "result_list_item.html" %}
+        {%- endfor %}
+    </div>
+</div>
+<div class="container fixed-bottom">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <span class="navbar-brand">Type</span>
+        <div class="navbar-collapse collapse" id="navbarToggleExternalContent2">
+            <div class="navbar-nav">
+                {%- for t in rank_type %}
+                {%- if current_type == t %}
+                <a class="nav-item nav-link active">
+                {% else %}
+                <a href="{{url_for('rankings_typed', current_type = t)}}" class="nav-item nav-link link-dark">
+                {%- endif %}
+                    {{ t }}
+                </a>
+                {%- endfor %}
+            </div>
+        </div>
+        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarToggleExternalContent2" aria-controls="navbarToggleExternalContent2" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+</div>
 {% endblock %}
+{#
+<!-- <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Pazzle15</a>
+    <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse" id="navbarToggleExternalContent">
+        <div class="navbar-nav">
+            {% for k in page_dict.keys() %}
+            {% if request.url_rule.endpoint == k %}
+            <a class="nav-item nav-link active">
+                {% else %}
+                <a href="/{{k}}" class="nav-item nav-link link-dark">
+                    {% endif %}
+                    {{ page_dict[k] }}
+                </a>
+                {% endfor %}
+        </div>
+    </div>
+</nav> -->
+#}
