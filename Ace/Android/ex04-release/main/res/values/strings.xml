@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">15パズルA</string>
+    <string name="label_title">15パズルA</string>
+    <string name="label_pazzle">パズル</string>
+    <string name="label_rank">ランキング</string>
+    <string name="label_statistics">統計</string>
+    <string name="label_registered_name">登録名：</string>
+    <string name="label_title_player">プレイヤー：</string>
+    <string name="label_no_name">名無し</string>
+    <string name="label_name_config">登録変更</string>
+    <string name="laben_btn_retire">諦める</string>
+    <string name="time_zero">00:00.00</string>
+    <string name="move_zero">000手</string>
+    <string name="label_onshuffle">シャッフル中</string>
+    <string name="input">登録</string>
+    <string name="label_pname">名前</string>
+    <string name="label_created_dt">登録日時：</string>
+    <string name="label_player_id">番号：</string>
+    <string name="label_select">選択</string>
+    <string name="label_edit">編集</string>
+    <string name="label_id">番号：</string>
+    <string name="label_move_count">手数：</string>
+    <string name="label_pzt">タイム：</string>
+    <string name="label_btn_latest">最新</string>
+    <string name="label_btn_moves">手数</string>
+    <string name="label_btn_time">タイム</string>
+    <string name="label_title_num_record">表示数</string>
+    <string name="label_title_datetime">日時：</string>
+    <string name="label_played_time">合計プレイ時間：</string>
+    <string name="label_best_time">ベストタイム：</string>
+    <string name="label_worst_time">ワーストタイム：</string>
+    <string name="label_avg_time">平均タイム：</string>
+    <string name="label_best_movecount">最少手数：</string>
+    <string name="label_worst_movecount">最多手数：</string>
+    <string name="label_avg_movecount">平均手数：</string>
+    <string name="label_play_count">プレイ回数：</string>
+</resources>
