@@ -13,6 +13,8 @@ import serial
 
 from Pazzle15DBHelper import *
 
+import solve_main as solver
+
 class SerCom:
     def __init__(self, tty, baud='115200'):
         self.ser = serial.Serial(tty, baud, timeout=0.1)
@@ -38,11 +40,14 @@ class SerCom:
             lst = line.decode('utf-8').split(',')
             lst.pop()
             if flg_board:
-                self.board[b] = lst
+                self.board[b] = list(map(
+                    lambda s:int(s) if s != '16' else 0
+                , lst))
                 b += 1
                 if b == board_len:
                     flg_board = False
                     pprint(self.board)
+
             elif lst[0] == '-2':
                 print('board data:')
                 self.board = [None for i in range(int(lst[1]))]
