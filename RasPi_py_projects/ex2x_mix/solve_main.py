@@ -330,29 +330,21 @@ class Slide():
         """
 
 def route_test(slide,route):
-    lst = []
     if route == []:
         return -1
     else:
         for i in range(len(route)-1):
-            c = ''
             if route[i][0] <  route[i+1][0]:
                 slide.move(1)
-                c = 'a'
             elif route[i+1][0] <  route[i][0]:
                 slide.move(3)
-                c = 'd'
             elif route[i+1][1] <  route[i][1]:
                 slide.move(0)
-                c = 's'
             elif route[i+1][1] >  route[i][1]:
                 slide.move(2)
-                c = 'w'
-            if c != '': lst.append(c)
-        # pprint(lst)
     return slide
 
-def make_route_serial_lst(route);
+def make_route_serial_lst(route):
     lst = []
     if route == []:
         return -1
@@ -360,13 +352,13 @@ def make_route_serial_lst(route);
         for i in range(len(route)-1):
             c = ''
             if route[i][0] <  route[i+1][0]:
-                c = 'a'
-            elif route[i+1][0] <  route[i][0]:
                 c = 'd'
+            elif route[i+1][0] <  route[i][0]:
+                c = 'a'
             elif route[i+1][1] <  route[i][1]:
-                c = 's'
-            elif route[i+1][1] >  route[i][1]:
                 c = 'w'
+            elif route[i+1][1] >  route[i][1]:
+                c = 's'
             if c != '': lst.append(c)
         # pprint(lst)
     return lst
@@ -456,7 +448,6 @@ def solve(board):
     slide.fixed[1][3] = 1
     slide.fixed[1][2] = 1
 
-    #6マスなので　もう　ゲーム木探索でも解けるのでは？
     #10,14
     result = slide.move_x(10,(1,3))
 
@@ -500,7 +491,10 @@ def solve(board):
         slide.move(2)
 
     print(len(slide.route))
-
+    print(slide.puzzle[0])
+    print(slide.puzzle[1])
+    print(slide.puzzle[2])
+    print(slide.puzzle[3])
 
     return make_route_serial_lst(slide.route) 
 

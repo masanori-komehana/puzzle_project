@@ -30,6 +30,7 @@ class SerCom:
     def get_q(self):
         flg_board = False
         board_len = 0
+        is_solve = False
         self.board = []
         b = 0
         while True:
@@ -47,6 +48,14 @@ class SerCom:
                 if b == board_len:
                     flg_board = False
                     pprint(self.board)
+                    if is_solve:
+                        sol_lst = solver.solve(self.board)
+                        print(f"moves: {len(sol_lst)}")
+                        for s in sol_lst:
+                            c = str.encode(s)
+                            self.ser.write(c)
+                            time.sleep(0.1)
+
 
             elif lst[0] == '-2':
                 print('board data:')
@@ -54,25 +63,35 @@ class SerCom:
                 flg_board = True
                 board_len = int(lst[1])
                 b = 0
+            elif lst[0] == '-3':
+                if lst[1] == 'solve':
+                    print("solver start:")
+                    self.ser.write(str.encode('U'))
+                    is_solve = True
+
             else:
                 movecnt  = int(lst[0])
                 ms10 = int(lst[1])
                 resigned = int(lst[2])
                 name = "Guest"
-                try:
-                    with create_session() as db:
-                        p = get_current_player(db)
-                        name = p.name
-                        ret = Result(
-                            player_id=p.player_id,
-                            pazzletime=ms10,
-                            movecount=movecnt,
-                            resigned=resigned
-                        )
-                        db = scoped_session(SessionMaker)    
-                        db.add(ret)
-                except Exeption as e:
-                    print(e)
+                if is_solve:
+                    is_solve = False
+                    print("solve finish")
+                else:
+                    try:
+                        with create_session() as db:
+                            p = get_current_player(db)
+                            name = p.name
+                            ret = Result(
+                                player_id=p.player_id,
+                                pazzletime=ms10,
+                                movecount=movecnt,
+                                resigned=resigned
+                            )
+                            db = scoped_session(SessionMaker)    
+                            db.add(ret)
+                    except Exeption as e:
+                        print(e)
                 print('pazzle record')
                 print(f"move count: {movecnt}")
                 print(f"time: {ms10_to_time(ms10)}")
