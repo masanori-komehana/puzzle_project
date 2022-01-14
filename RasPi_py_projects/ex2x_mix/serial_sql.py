@@ -49,12 +49,13 @@ class SerCom:
                     flg_board = False
                     pprint(self.board)
                     if is_solve:
-                        sol_lst = solver.solve(self.board)
+                        solve_result = solver.solve(self.board)
+                        sol_lst = solver.make_route_serial_lst(solve_result.route)
                         print(f"moves: {len(sol_lst)}")
                         for s in sol_lst:
                             c = str.encode(s)
                             self.ser.write(c)
-                            time.sleep(0.1)
+                            time.sleep(0.05)
 
 
             elif lst[0] == '-2':

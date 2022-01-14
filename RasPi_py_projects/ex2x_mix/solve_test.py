@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from copy import deepcopy
 import solve_main as Sol
 
@@ -33,4 +36,5 @@ if __name__ == '__main__':
         print(f"move :{i}")
         a.move(i)
         show_puzzle(a)
+    Sol.solve(start)
 

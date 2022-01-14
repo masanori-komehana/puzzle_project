@@ -352,7 +352,7 @@ def route_test(slide,route):
         # pprint(lst)
     return slide
 
-def make_route_serial_lst(route);
+def make_route_serial_lst(route):
     lst = []
     if route == []:
         return -1

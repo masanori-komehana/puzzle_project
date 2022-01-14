@@ -226,7 +226,7 @@ class Slide():
         result = hoge.explore()
         route = []
         if result == 0:
-           route = hoge.route
+            route = hoge.route
         else:
             return -1
 
@@ -352,20 +352,32 @@ def make_route_serial_lst(route):
         for i in range(len(route)-1):
             c = ''
             if route[i][0] <  route[i+1][0]:
-                c = 'd'
-            elif route[i+1][0] <  route[i][0]:
                 c = 'a'
+            elif route[i+1][0] <  route[i][0]:
+                c = 'd'
             elif route[i+1][1] <  route[i][1]:
-                c = 'w'
-            elif route[i+1][1] >  route[i][1]:
                 c = 's'
+            elif route[i+1][1] >  route[i][1]:
+                c = 'w'
             if c != '': lst.append(c)
         # pprint(lst)
     return lst
 
+def show_puzzle(slide):
+    print(slide.puzzle[0])
+    print(slide.puzzle[1])
+    print(slide.puzzle[2])
+    print(slide.puzzle[3])
+
 def solve(board):
     slide = Slide()
-    slide.pazzle = board
+    slide.puzzle = board
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j]==0:
+                slide.x = j
+                slide.y = i
+                slide.route_clear()
 
     #1
     slide.move_x(1,(0,0))
@@ -422,6 +434,7 @@ def solve(board):
 
     slide.fixed[2][0] = 1
     slide.fixed[3][0] = 1
+
 
     #6
     slide.move_x(6,(1,1))
@@ -496,7 +509,7 @@ def solve(board):
     print(slide.puzzle[2])
     print(slide.puzzle[3])
 
-    return make_route_serial_lst(slide.route) 
+    return slide
 
 
 if __name__ == '__main__' :
