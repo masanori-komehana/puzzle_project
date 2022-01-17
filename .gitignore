@@ -1,5 +1,5 @@
 .DS_Store
-# document/.env
+document/.env
 Puzzle15_site/env
 document/build
 TS_Projects
@@ -8,10 +8,12 @@ TS_Projects
 test
 ~$*
 *.pyc
-RasPi_py_projects/ex22_sqlite/puzzle15.db
-RasPi_py_projects/ex22_sqlite/records.csv
-RasPi_py_projects/ex22_sqlite/puzzle15.db
-RasPi_py_projects/ex22_sqlite/records.csv
+Puzzle15_site/puzzle15/*.db
+Puzzle15_site/records.csv
+RasPi_py_projects/ex24_flask/puzzle15/*.db
+RasPi_py_projects/ex24_flask/records.csv
+RasPi_py_projects/ex2x_mix/puzzle15.db
+RasPi_py_projects/ex22_mix/records.csv
 RasPi_py_projects/ex22_sqlite/puzzle15.db
 RasPi_py_projects/ex22_sqlite/records.csv
 *.log
