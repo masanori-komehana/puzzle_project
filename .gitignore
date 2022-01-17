@@ -10,10 +10,10 @@ test
 *.pyc
 Puzzle15_site/puzzle15/*.db
 Puzzle15_site/records.csv
-RasPi_py_projects/ex24_flask/puzzle15/*.db
+RasPi_py_projects/ex24_flask/pazzle15/*.db
 RasPi_py_projects/ex24_flask/records.csv
-RasPi_py_projects/ex2x_mix/puzzle15.db
+RasPi_py_projects/ex2x_mix/pazzle15.db
 RasPi_py_projects/ex22_mix/records.csv
-RasPi_py_projects/ex22_sqlite/puzzle15.db
+RasPi_py_projects/ex22_sqlite/pazzle15.db
 RasPi_py_projects/ex22_sqlite/records.csv
 *.log
