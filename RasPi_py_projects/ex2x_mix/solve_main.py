@@ -1,24 +1,8 @@
 ﻿
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Jun 29 13:35:47 2020
 
-@author: kisim
-"""
-
-"""
-スライドパズルの解法を探す
-
-最終的には、パズドラに応用したい。そして10combo を目指す
-"""
-"""
-Astar アルゴリズムにより、fixed をよけながら移動する
-場合分けはエラーの原因で面倒のため
-
-
-"""
 import random
-import numpy as np      #   Numpyライブラリ
+import numpy as np      
 import copy
 from pprint import pprint
 
