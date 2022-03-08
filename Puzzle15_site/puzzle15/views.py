@@ -5,8 +5,8 @@ from flask import (request, redirect,
                 flash, session)
 from flask_paginate import Pagination, get_page_parameter
 
-from pazzle15 import app, db
-from pazzle15.models import Player, Result
+from puzzle15 import app, db
+from puzzle15.models import Player, Result
 
 
 page_dict = {"results": "Results", "players": "Players",

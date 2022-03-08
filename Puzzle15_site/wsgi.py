@@ -1,5 +1,5 @@
 
-from pazzle15 import app
+from puzzle15 import app
 
 
 if __name__ == '__main__':

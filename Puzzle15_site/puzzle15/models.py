@@ -1,5 +1,5 @@
 import datetime
-from pazzle15 import db
+from puzzle15 import db
 
 class Result(db.Model):
     __tablename__ = "result"

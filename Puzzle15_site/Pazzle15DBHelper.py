@@ -13,7 +13,7 @@ from sqlalchemy import desc, asc
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 # 接続先となるDBの名前。'/home/user/database.db'といった表現方法も可能。
-dbname = 'pazzle15/pazzle15.db'
+dbname = 'puzzle15/puzzle15.db'
 
 # コネクタ作成。dbnameの名前を持つDBへ接続する。
 
