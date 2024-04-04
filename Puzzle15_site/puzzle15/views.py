@@ -8,6 +8,9 @@ from flask_paginate import Pagination, get_page_parameter
 from puzzle15 import app, db
 from puzzle15.models import Player, Result
 
+from sqlalchemy import text
+
+
 
 page_dict = {"results": "Results", "players": "Players",
             "rankings": "Rankings", "statistics": "Statistics"}
@@ -87,7 +90,7 @@ def statistics():
         'worst_movecount':'最多手数',
         'avg_movecount':'平均手数' 
     }
-    result = db.engine.execute("select" +
+    result = db.session.execute(text("select" +
         "    player.player_id as 'player_id'," +
         "    player.name as 'name'," +
         "    count(*) as 'play_count'," +
@@ -108,8 +111,17 @@ def statistics():
         "    player.name " +
         "order by " +
         " player.player_id asc " +
-        ";")
-    statistics = [dict(row) for row in result]
+        ";"))
+    # 各行を辞書に変換する関数
+    def row_to_dict(row):
+        # キーと値のペアを定義
+        keys = ['player_id', 'name', 'play_count', 'played_time', 'best_time', 'worst_time', 'avg_time', 'best_movecount', 'worst_movecount', 'avg_movecount']
+        
+        # タプルの要素を辞書に変換
+        return {keys[i]: value for i, value in enumerate(row)}
+
+    # 結果セットから辞書に変換
+    statistics = [row_to_dict(row) for row in result.fetchall()]
     for row_dict in statistics:
         row_dict['played_time'] = get_played_time_str(row_dict['played_time'])
         row_dict['best_time'] = get_pzt_str(row_dict['best_time'])
