@@ -17,3 +17,5 @@ RasPi_py_projects/ex22_mix/records.csv
 RasPi_py_projects/ex22_sqlite/pazzle15.db
 RasPi_py_projects/ex22_sqlite/records.csv
 *.log
+Puzzle15_site/poetry.lock
+Puzzle15_site/instance/*
